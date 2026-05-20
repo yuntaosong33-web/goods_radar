@@ -1,0 +1,15 @@
+source_id	collected_at	status	route_count	reason
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	blocked_or_unavailable	0	HTTP 403
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	blocked_or_unavailable	0	HTTP 403
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	collected	3	OK
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	blocked_or_unavailable	0	Você excedeu o limite de solicitações. Por favor, tente novamente em 10 segundos.
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	blocked_or_unavailable	0	Você excedeu o limite de solicitações. Por favor, tente novamente em 10 segundos.
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	blocked_or_unavailable	0	Você excedeu o limite de solicitações. Por favor, tente novamente em 10 segundos.
+un_comtrade	2026-05-19	auth_required	0	COMTRADE_API_KEY is required by the current UN Comtrade API
+brazil_comex_stat	2026-05-19	collected	3	OK

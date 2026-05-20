@@ -1,0 +1,16 @@
+[
+  {
+    "source_id": "py-senacsa-001",
+    "score": 69,
+    "omasum_level": "O3",
+    "evidence_level": "E2",
+    "development_distance": "D1",
+    "route_feasibility": "medium",
+    "risk_flags": [],
+    "status": "要视频",
+    "next_action": "Ask for current omasum/omaso/librillo video and weekly collection volume.",
+    "rationale": "Official plant signal and product keywords are promising, but there is no bill, media, or field proof.",
+    "citations": ["https://example.local/py/a-frigorifico"],
+    "report_markdown": "## A) Supplier Identity\nOfficial-list Paraguay frigorifico lead with registration context.\n\n## B) Omasum Signal\nProduct keywords mention omaso/librillo but no current media.\n\n## C) Underdeveloped Potential\nPotential source-side supplier, still unverified.\n\n## D) Route Feasibility\nNo public route row is attached to this Paraguay candidate in the current case.\n\n## E) Evidence Chain\nOfficial signal only; no bill, media, field, or trial evidence.\n\n## F) Risks\nProduct fit and source access remain unverified.\n\n## G) Next Verification Action\nRequest current omasum/omaso/librillo video and weekly collection volume."
+  }
+]

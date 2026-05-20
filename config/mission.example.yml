@@ -1,0 +1,100 @@
+mission_name: "南美 Omasum 寻货雷达 v1"
+
+product:
+  primary_name: "Omasum"
+  chinese_names:
+    - "牛百叶"
+    - "牛瓣胃"
+    - "叶胃"
+  hs_codes:
+    - "050400"
+    - "05040000"
+  accepted_forms:
+    - "Frozen Salted Omasum"
+    - "Frozen Omasum"
+    - "Salted Omasum"
+  excluded_products:
+    - "Rumen"
+    - "Honeycomb Tripe"
+    - "Mixed Beef Tripe"
+    - "Beef Intestine"
+    - "Casings"
+
+regions:
+  target_region: "南美洲"
+  countries:
+    - "Brazil"
+    - "Paraguay"
+    - "Uruguay"
+    - "Argentina"
+    - "Colombia"
+
+destinations:
+  - "Hai Phong, Vietnam"
+  - "Hong Kong"
+
+languages:
+  - "English"
+  - "Spanish"
+  - "Portuguese"
+  - "Chinese"
+
+keywords:
+  precise:
+    - "beef omasum"
+    - "bovine omasum"
+    - "book tripe"
+    - "leaf tripe"
+    - "bible tripe"
+    - "omaso bovino"
+    - "librillo bovino"
+    - "librillo"
+    - "omaso"
+    - "folhoso"
+    - "牛百叶"
+    - "牛瓣胃"
+  broad:
+    - "beef tripe"
+    - "bovine stomach"
+    - "beef stomach"
+    - "edible beef offal"
+    - "mondongo"
+    - "panza"
+    - "estomago bovino"
+    - "vísceras bovinas"
+    - "subproductos bovinos"
+    - "bucho bovino"
+    - "miudos bovinos"
+    - "miúdos bovinos"
+    - "subprodutos bovinos"
+  weak_signals:
+    - "frigorifico"
+    - "frigorífico"
+    - "matadero"
+    - "abatedouro"
+    - "desposte"
+    - "graxaria"
+    - "cold storage"
+    - "rendering"
+    - "pet food"
+
+quality_profile:
+  packaging_reference:
+    bag_weight_kg: 40
+    container_type: "40RQ"
+    target_net_weight_mt: 28
+    temperature_celsius: -18
+  key_qc_items:
+    - "叶片完整度"
+    - "清洗程度"
+    - "杂质"
+    - "异味"
+    - "盐分"
+    - "含水"
+    - "破损率"
+
+strategy:
+  mature_sources_weight: 0.25
+  semi_mature_sources_weight: 0.60
+  raw_sources_weight: 0.15
+  main_target: "O3+、E2+、D2/D3，并且当前存在低值流向信号"

@@ -1,0 +1,30 @@
+{
+  "name": "goods-radar",
+  "version": "0.1.0",
+  "description": "南美 Omasum 本地寻货雷达 CLI",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "collect": "node collect.mjs",
+    "collect:routes": "node collect-routes.mjs",
+    "doctor": "node doctor.mjs",
+    "import:bol": "node import-bol.mjs",
+    "llm:evaluate": "node llm-evaluate.mjs",
+    "scan": "node scan.mjs",
+    "test": "node --test",
+    "score": "node score.mjs",
+    "score:rules": "node score-rules.mjs",
+    "verify": "node verify-pipeline.mjs",
+    "weekly": "node weekly-report.mjs"
+  },
+  "keywords": [
+    "sourcing",
+    "omasum",
+    "trade",
+    "radar",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

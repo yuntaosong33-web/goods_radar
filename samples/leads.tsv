@@ -1,0 +1,6 @@
+source_id	raw_company_name	country	city	company_type	source_type	url_or_file	official_registration	description	notes
+py-senacsa-001	A Frigorifico Paraguay SA	Paraguay	Asuncion	frigorifico	official_list	https://example.local/py/a-frigorifico	SENACSA-001	出口肉厂，资料中出现 subproductos bovinos，并需要确认 omaso bovino / librillo 是否可收集。	有屠宰和出口基础，但尚未发现成熟 Omasum 提单。
+br-weak-001	C Subprodutos Bovinos Ltda	Brazil	Campo Grande	byproduct_processor	weak_signal	https://example.local/br/c-subprodutos	BR-SIF-202	社媒和本地页面出现 miudos bovinos、folhoso、bucho bovino，附近有 abatedouro 和 cold storage。	可能是待开发加工商，下一步要当前 folhoso 视频。
+uy-ref-001	B Exporter Uruguay	Uruguay	Montevideo	exporter	bill_of_lading	https://example.local/uy/b-exporter	INAC-303	Frozen Salted Omasum / book tripe，HS 05040000，40RQ 发往 Hong Kong。	成熟参考样本，用于价格、包装和路线参考。
+br-excluded-001	Rumen Trader Brazil	Brazil	Sao Paulo	trader	manual_tsv	https://example.local/br/rumen-trader		只出现 rumen、honeycomb tripe、beef intestine 和 casings。	应跳过，因为没有 Omasum 明确信号。
+py-dup-001	A Frigorifico Paraguay S.A.	Paraguay	Asuncion	frigorifico	official_list	https://example.local/py/a-frigorifico	SENACSA-001	类似名单再次出现 librillo bovino。	重复 URL 和注册号，应跳过去重。
