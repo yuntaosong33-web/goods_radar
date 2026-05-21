@@ -30,6 +30,23 @@ test('buildEvaluationCases packages company, route, evidence, and guardrails for
       { reporter: 'Brazil', partner: 'Vietnam', route_strength: 'strong', status: 'route_signal_only' },
     ],
     evidence: [],
+    radarScores: [
+      {
+        source_id: 'c1',
+        radar_score: '82',
+        priority_grade: 'A',
+        invisible_supply_rationale: 'Official active plant with byproduct capability and no matching Asia bill row.',
+      },
+    ],
+    capabilities: [
+      {
+        official_registration: '',
+        legal_name: 'Frigorifico X',
+        country: 'Brazil',
+        activity_type: 'slaughterhouse',
+        product_scope: 'bovine byproducts',
+      },
+    ],
   });
 
   assert.equal(cases.length, 1);
@@ -38,6 +55,9 @@ test('buildEvaluationCases packages company, route, evidence, and guardrails for
   assert.equal(cases[0].guardrails.max_evidence_level, 'E1');
   assert.equal(cases[0].guardrails.d1_requires_bill_or_trade_evidence, true);
   assert.equal(cases[0].routes[0].status, 'route_signal_only');
+  assert.equal(cases[0].radar.radar_score, '82');
+  assert.equal(cases[0].radar.priority_grade, 'A');
+  assert.equal(cases[0].radar.capabilities[0].activity_type, 'slaughterhouse');
 });
 
 test('buildCodexEvaluationPrompt requires JSON output and forbids public route evidence upgrades', () => {
@@ -55,6 +75,8 @@ test('buildCodexEvaluationPrompt requires JSON output and forbids public route e
   assert.match(prompt, /JSON/);
   assert.match(prompt, /route_feasibility/);
   assert.match(prompt, /must not raise evidence_level/i);
+  assert.match(prompt, /hidden supply/i);
+  assert.match(prompt, /negative space/i);
   assert.match(prompt, /source_id/);
 });
 

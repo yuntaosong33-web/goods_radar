@@ -4,9 +4,9 @@ Goods Radar is an Agent-mode sourcing radar for South American omasum. Codex per
 
 ## Main Workflow
 
-1. Collect structured leads and public route signals.
+1. Collect structured leads, capability radar facts, and public route signals.
 2. Run `npm run score`.
-3. Node builds a rule baseline and Codex prompt.
+3. Node builds a rule baseline, capability radar baseline, and Codex prompt.
 4. Codex returns JSON assessments.
 5. Node applies guardrails, writes reports, updates `data/companies.tsv`, and appends `data/llm-evaluations.tsv`.
 6. Run `npm run verify`.
@@ -33,6 +33,7 @@ System layer:
 ## Commands
 
 - `npm run collect` - collect official/weak source leads.
+- `npm run collect:radar` - collect six-country capability radar facts.
 - `npm run collect:routes` - collect public route statistics.
 - `npm run scan -- --collect` - import collected leads into company records.
 - `npm run score:rules` - rule baseline only.
@@ -44,6 +45,7 @@ System layer:
 
 - Do not invent evidence.
 - Route statistics never upgrade evidence.
+- Capability radar facts only raise `radar_score` and `priority_grade`; they never upgrade evidence.
 - D1 requires bill/trade/transaction evidence.
-- Prefer underdeveloped D2/D3 candidates with credible next verification steps.
+- Prefer underdeveloped D2/D3 candidates with credible official capability, byproduct, capacity, export readiness, or cold-chain signals.
 - If Codex CLI cannot run, keep the generated prompt and use `--response-file` to import a Codex response.

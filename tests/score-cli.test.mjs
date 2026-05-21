@@ -11,6 +11,7 @@ test('score --dry-run builds the Codex prompt without applying assessments', () 
   });
 
   assert.match(output, /Goods Radar Codex LLM Evaluator/);
+  assert.match(output, /Radar rows:/);
   assert.match(output, /Dry run/);
 });
 

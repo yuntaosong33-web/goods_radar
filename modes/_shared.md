@@ -8,6 +8,10 @@ Always ground evaluation in project data:
 
 - `config/mission.yml` or `config/mission.example.yml`
 - `data/companies.tsv`
+- `data/factory-capabilities.tsv`
+- `data/slaughter-capacity.tsv`
+- `data/export-approvals.tsv`
+- `data/radar-scores.tsv`
 - `data/trade-routes.tsv`
 - `data/evidence.tsv`
 - `data/bill-of-lading.tsv`
@@ -17,11 +21,13 @@ Always ground evaluation in project data:
 ## Hard Guardrails
 
 - Public route statistics only affect `route_feasibility`; they never raise `evidence_level`.
+- Capability radar facts only affect `radar_score`, `priority_grade`, and sourcing rationale; they never raise `evidence_level`.
 - Do not mark `D1` unless bill-of-lading, trade, invoice, or mature transaction evidence exists.
 - Do not invent suppliers, registrations, shipments, buyers, prices, ports, certificates, photos, or visits.
 - Do not convert weak web text into supplier proof. Official lists need registration or structured source context.
 - Missing current media, local verification, or shipment evidence means the next action should request proof rather than assume readiness.
 - The goal is underdeveloped sourcing potential, not merely already-mature traded suppliers.
+- Hidden supply analysis should look for capacity, byproduct handling, export readiness, cold-chain path, and market whitespace before mature bills appear.
 
 ## Canonical Levels
 

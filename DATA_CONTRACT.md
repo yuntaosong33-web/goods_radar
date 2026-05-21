@@ -17,6 +17,11 @@ These files contain sourcing facts, buyer preferences, field feedback, and gener
 | `data/trade-routes.tsv` | Public route statistics; route feasibility only |
 | `data/trade-route-history.tsv` | Public route collection audit |
 | `data/bill-of-lading.tsv` | Optional bill-of-lading detail imports |
+| `data/factory-capabilities.tsv` | Official factory, processor, cold storage, and byproduct capability base |
+| `data/slaughter-capacity.tsv` | Plant/month or region slaughter and capacity signals |
+| `data/export-approvals.tsv` | Destination market, product category, and certification/approval signals |
+| `data/radar-scores.tsv` | Capability radar component scores and A-E priority |
+| `data/radar-source-health.tsv` | Capability source status and audit trail |
 | `data/evidence.tsv` | Documents, media, field proof, official evidence |
 | `data/llm-evaluations.tsv` | Codex assessment audit after Node guardrails |
 | `data/local-tasks.tsv` | Phone/video/field verification tasks |
@@ -49,6 +54,8 @@ These files contain reusable logic, prompts, and validation:
 
 - `npm run score` is the Codex Agent-mode evaluation entrypoint.
 - `npm run score:rules` is the offline rule baseline.
+- `npm run collect:radar` is the six-country capability radar collector.
 - Codex can reason, rank, and explain, but Node applies hard evidence and route guardrails before writing data.
 - Public statistics never upgrade evidence; they only affect `route_feasibility`.
+- Capability radar facts can raise `radar_score` and `priority_grade`; they never upgrade evidence or create `D1`.
 - Optional bill-of-lading data can create E2/D1 mature references, but it is not required for discovering underdeveloped sources.

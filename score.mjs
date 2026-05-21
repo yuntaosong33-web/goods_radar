@@ -4,7 +4,17 @@ import { spawnSync } from 'child_process';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
-import { COMPANY_HEADERS, EVIDENCE_HEADERS, LLM_EVALUATION_HEADERS, LOCAL_TASK_HEADERS, TRADE_ROUTE_HEADERS } from './lib/constants.mjs';
+import {
+  COMPANY_HEADERS,
+  EVIDENCE_HEADERS,
+  EXPORT_APPROVAL_HEADERS,
+  FACTORY_CAPABILITY_HEADERS,
+  LLM_EVALUATION_HEADERS,
+  LOCAL_TASK_HEADERS,
+  RADAR_SCORE_HEADERS,
+  SLAUGHTER_CAPACITY_HEADERS,
+  TRADE_ROUTE_HEADERS,
+} from './lib/constants.mjs';
 import { loadMission } from './lib/config.mjs';
 import { ensureProjectFiles } from './lib/files.mjs';
 import {
@@ -97,6 +107,9 @@ const baseline = runRuleScore({ dryRun: true, now: stamp });
 const { mission } = loadMission();
 const { rows: routes } = readTsv('data/trade-routes.tsv', TRADE_ROUTE_HEADERS);
 const { rows: evidence } = readTsv('data/evidence.tsv', EVIDENCE_HEADERS);
+const { rows: capabilities } = readTsv('data/factory-capabilities.tsv', FACTORY_CAPABILITY_HEADERS);
+const { rows: capacities } = readTsv('data/slaughter-capacity.tsv', SLAUGHTER_CAPACITY_HEADERS);
+const { rows: approvals } = readTsv('data/export-approvals.tsv', EXPORT_APPROVAL_HEADERS);
 const companies = sourceId
   ? baseline.scoredRows.filter(row => row.source_id === sourceId)
   : baseline.scoredRows.slice(0, limit);
@@ -106,7 +119,17 @@ if (!companies.length) {
   process.exit(1);
 }
 
-const cases = buildEvaluationCases({ mission, companies, routes, evidence, limit: companies.length });
+const cases = buildEvaluationCases({
+  mission,
+  companies,
+  routes,
+  evidence,
+  radarScores: baseline.radarRows,
+  capabilities,
+  capacities,
+  approvals,
+  limit: companies.length,
+});
 const prompt = buildCodexEvaluationPrompt(cases, {
   sharedMode: readOptional('modes/_shared.md'),
   profileMode: readOptional('modes/_profile.md'),
@@ -156,6 +179,7 @@ if (!skipApply) {
   const updatedById = new Map(updatedSubset.map(row => [row.source_id, row]));
   const merged = baseline.scoredRows.map(row => updatedById.get(row.source_id) || row);
   writeTsv('data/companies.tsv', COMPANY_HEADERS, merged);
+  writeTsv('data/radar-scores.tsv', RADAR_SCORE_HEADERS, baseline.radarRows);
   appendTsvRows('data/local-tasks.tsv', LOCAL_TASK_HEADERS, baseline.newTasks);
   appendTsvRows('data/llm-evaluations.tsv', LLM_EVALUATION_HEADERS, evaluations);
   reportsWritten = writeEvaluationReports(evaluations);

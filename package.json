@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "collect": "node collect.mjs",
+    "collect:radar": "node collect-radar.mjs",
     "collect:routes": "node collect-routes.mjs",
     "doctor": "node doctor.mjs",
     "import:bol": "node import-bol.mjs",

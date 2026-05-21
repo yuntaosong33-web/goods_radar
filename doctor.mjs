@@ -8,9 +8,14 @@ import {
   COMPANY_STATUSES,
   DEVELOPMENT_DISTANCES,
   EVIDENCE_LEVELS,
+  EXPORT_APPROVAL_HEADERS,
+  FACTORY_CAPABILITY_HEADERS,
   LLM_EVALUATION_HEADERS,
   LOCAL_TASK_HEADERS,
   OMASUM_LEVELS,
+  RADAR_SCORE_HEADERS,
+  RADAR_SOURCE_HEALTH_HEADERS,
+  SLAUGHTER_CAPACITY_HEADERS,
   TRADE_ROUTE_HEADERS,
   TRADE_ROUTE_HISTORY_HEADERS,
 } from './lib/constants.mjs';
@@ -97,6 +102,11 @@ checkTsv('data/collection-history.tsv', COLLECTION_HISTORY_HEADERS);
 checkTsv('data/trade-routes.tsv', TRADE_ROUTE_HEADERS);
 checkTsv('data/trade-route-history.tsv', TRADE_ROUTE_HISTORY_HEADERS);
 checkTsv('data/bill-of-lading.tsv', BILL_OF_LADING_HEADERS);
+checkTsv('data/factory-capabilities.tsv', FACTORY_CAPABILITY_HEADERS);
+checkTsv('data/slaughter-capacity.tsv', SLAUGHTER_CAPACITY_HEADERS);
+checkTsv('data/export-approvals.tsv', EXPORT_APPROVAL_HEADERS);
+checkTsv('data/radar-scores.tsv', RADAR_SCORE_HEADERS);
+checkTsv('data/radar-source-health.tsv', RADAR_SOURCE_HEALTH_HEADERS);
 checkTsv('data/llm-evaluations.tsv', LLM_EVALUATION_HEADERS);
 checkTsv('data/local-tasks.tsv', LOCAL_TASK_HEADERS);
 checkTsv('data/scan-history.tsv', ['source_id', 'url_or_file', 'first_seen', 'source_type', 'raw_company_name', 'normalized_company_name', 'country', 'status', 'reason']);

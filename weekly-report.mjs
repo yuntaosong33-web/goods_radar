@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { mkdirSync, writeFileSync } from 'fs';
-import { COMPANY_HEADERS, LOCAL_TASK_HEADERS } from './lib/constants.mjs';
+import { COMPANY_HEADERS, LOCAL_TASK_HEADERS, RADAR_SCORE_HEADERS } from './lib/constants.mjs';
 import { loadMission } from './lib/config.mjs';
 import { companyTypeLabel, countryLabel, formatLevels, formatScore } from './lib/display.mjs';
 import { ensureProjectFiles } from './lib/files.mjs';
@@ -14,10 +14,9 @@ function argValue(name) {
 
 function mdTable(headers, rows) {
   if (!rows.length) return '_暂无_';
-  const cleanRows = rows;
   const header = `| ${headers.join(' | ')} |`;
   const sep = `| ${headers.map(() => '---').join(' | ')} |`;
-  const body = cleanRows.map(row => `| ${row.map(cell => String(cell ?? '').replace(/\|/g, '/')).join(' | ')} |`);
+  const body = rows.map(row => `| ${row.map(cell => String(cell ?? '').replace(/\|/g, '/')).join(' | ')} |`);
   return [header, sep, ...body].join('\n');
 }
 
@@ -52,6 +51,7 @@ ensureProjectFiles();
 const date = argValue('--date') || todayIso();
 const { mission } = loadMission();
 const { rows: companies } = readTsv('data/companies.tsv', COMPANY_HEADERS);
+const { rows: radarRows } = readTsv('data/radar-scores.tsv', RADAR_SCORE_HEADERS);
 const { rows: tasks } = readTsv('data/local-tasks.tsv', LOCAL_TASK_HEADERS);
 const { rows: history } = readTsv('data/scan-history.tsv');
 
@@ -59,6 +59,12 @@ const addedThisWeek = history.filter(row => row.status === 'added').length;
 const o3Plus = companies.filter(row => levelNumber(row.omasum_level, 'O') >= 3).length;
 const semiMature = companies.filter(row => ['D2', 'D3'].includes(row.development_distance)).length;
 const topCompanies = [...companies].sort((a, b) => score(b) - score(a)).slice(0, 20);
+const topRadar = [...radarRows]
+  .sort((a, b) => Number(b.radar_score || 0) - Number(a.radar_score || 0))
+  .slice(0, 20);
+const topVerificationPoints = topRadar
+  .filter(row => ['A', 'B', 'C'].includes(row.priority_grade))
+  .slice(0, 5);
 const topTasks = tasks
   .filter(row => !['已完成', '取消'].includes(row.status))
   .slice(0, 5);
@@ -67,12 +73,14 @@ const riskRows = companies
   .sort((a, b) => score(a) - score(b))
   .slice(0, 10);
 
-const missionName = mission.mission_name || '南美 Omasum 寻货雷达';
-const targetCountries = mission?.regions?.countries?.length
-  ? mission.regions.countries
-  : ['Paraguay', 'Brazil', 'Uruguay', 'Argentina', 'Colombia'];
+const missionName = mission.mission_name || '南美 Omasum 货源雷达';
+const radarCountries = ['Brazil', 'Paraguay', 'Uruguay', 'Argentina', 'Chile', 'Colombia'];
+const targetCountries = [...new Set([
+  ...(mission?.regions?.countries || []),
+  ...radarCountries,
+])];
 
-const content = `# AI 寻货雷达周报
+const content = `# AI 货源雷达周报
 
 任务：${missionName}
 周期：截至 ${date}
@@ -83,6 +91,7 @@ const content = `# AI 寻货雷达周报
 - O3 以上线索：${o3Plus} 家
 - D2/D3 待开发线索：${semiMature} 家
 - 待推进任务：${topTasks.length} 条
+- 潜在供给雷达目标：${radarRows.length} 家
 
 ## 2. 国家机会变化
 
@@ -92,21 +101,15 @@ ${mdTable(
     const rows = companies.filter(row => row.country === country);
     const countryO3 = rows.filter(row => levelNumber(row.omasum_level, 'O') >= 3).length;
     const countrySemi = rows.filter(row => ['D2', 'D3'].includes(row.development_distance)).length;
-    const conclusion = country === 'Paraguay'
-      ? '重点区域：优先电话核实 frigorifico'
-      : country === 'Brazil'
-        ? '高容量区域：成熟参考 + 二线挖掘'
-        : country === 'Uruguay'
-          ? '规范供应区域：适合做稳定参考'
-          : '观察池：有异常流向再投入';
+    const conclusion = rows.length ? '保留雷达跟进，按能力/副产品/出口准备度排序' : '暂无主档线索，优先补官方能力底图';
     return [countryLabel(country), rows.length, countryO3, countrySemi, conclusion];
   }),
 )}
 
-## 3. 本周 Top 20 供应商
+## 3. Top 20 供应商评分
 
 ${mdTable(
-  ['公司', '国家', '类型', '等级', '评分', '状态', '下一步动作'],
+  ['公司', '国家', '类型', 'O/E/D', '评分', '状态', '下一步动作'],
   topCompanies.map(row => [
     row.normalized_company_name,
     countryLabel(row.country),
@@ -118,11 +121,38 @@ ${mdTable(
   ]),
 )}
 
-## 4. 本周 Top 5 本地核实任务
+## 4. Top 20 潜在供给雷达
+
+${mdTable(
+  ['公司', '国家', 'Radar', '优先级', '隐形货源判断', '验证动作'],
+  topRadar.map(row => [
+    row.normalized_company_name,
+    countryLabel(row.country),
+    row.radar_score,
+    row.priority_grade,
+    row.invisible_supply_rationale,
+    row.recommended_verification,
+  ]),
+)}
+
+## 5. Top 5 线下验证点位
+
+${mdTable(
+  ['公司', '国家', 'Radar', '优先级', '动作'],
+  topVerificationPoints.map(row => [
+    row.normalized_company_name,
+    countryLabel(row.country),
+    row.radar_score,
+    row.priority_grade,
+    row.recommended_verification,
+  ]),
+)}
+
+## 6. 本周 Top 5 本地核实任务
 
 ${taskCards(topTasks)}
 
-## 5. 风险线索
+## 7. 风险线索
 
 ${mdTable(
   ['公司', '国家', '风险', '评分', '状态', '处理建议'],
@@ -136,17 +166,17 @@ ${mdTable(
   ]),
 )}
 
-## 6. 现场核实重点
+## 8. 现场核实重点
 
-- 优先核实 O3+、E2+、D2/D3 且分数高于 60 的待开发对象。
-- D1 对象作为价格、包装、路线参考，不作为主要开发对象。
-- 对任何拒绝当前视频、拒绝现场拜访、只催预付款的对象降级处理。
+- 优先核实 radar priority A/B/C 且 D2/D3 的工厂、二级加工商、冷库。
+- 提单或贸易记录仍只作为 E2/D1 成熟样本，不作为发现未开发货源的前置条件。
+- 能力雷达只能提高潜力优先级；证据等级仍需要视频、现场、提单、试单或复购证据。
 
-## 7. 下周行动
+## 9. 下周行动
 
-- 联系 Top 20 中尚未联系或处于“要视频”的公司。
-- 对待推进任务安排电话、门头照片、GPS、负责人 WhatsApp 和当前货物视频。
-- 将新增照片、视频、报价录入 \`data/evidence.tsv\`、\`data/quotes.tsv\` 和 \`data/local-tasks.tsv\`，再运行 \`npm run score\` 更新评分。
+- 对 Top 5 线下验证点位确认官方编号、周/月屠宰量、副产品归属、冷库路径和出口证书经验。
+- 把新增照片、视频、报价、提单或现场反馈录入 \`data/evidence.tsv\`、\`data/quotes.tsv\`、\`data/local-tasks.tsv\` 后重新运行 \`npm run score\`。
+- 对没有主档但有官方能力记录的国家，优先补充 scan/import 映射。
 `;
 
 mkdirSync('reports/weekly', { recursive: true });

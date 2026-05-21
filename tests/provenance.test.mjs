@@ -56,6 +56,9 @@ test('sourceAvailabilityRows describes blueprint sources as usable, gated, or ma
   assert.equal(byId.get('uruguay_meats_exporters'), 'usable_structured');
   assert.equal(byId.get('brazil_mapa_dipoa'), 'gated_entry_only');
   assert.equal(byId.get('brazil_comex_stat'), 'api_connected_route_signal_only');
+  assert.equal(byId.get('argentina_senasa_registros'), 'official_capability_source');
+  assert.equal(byId.get('chile_sag_leepp'), 'official_capability_source');
+  assert.equal(byId.get('colombia_invima_carne'), 'official_capability_source');
   assert.equal(byId.get('paid_bill_of_lading'), 'csv_xlsx_import_supported');
   assert.equal(byId.get('local_intelligence'), 'manual_verification_required');
 });

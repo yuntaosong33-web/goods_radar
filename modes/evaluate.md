@@ -20,11 +20,15 @@ Return an array. Each item must contain:
 6. `F) Risks` - concrete risk flags, not generic caution.
 7. `G) Next Verification Action` - one operational next step.
 
+When radar facts are present, include capability map, negative space analysis, likely byproduct/cold-chain path, five verification questions, and the next field action inside the A-G report.
+
 ## Scoring Guidance
 
 - Score 0-100.
 - Keep high scores for candidates with both plausible source access and clear next verification leverage.
 - A strong public route can raise route confidence but not evidence.
+- A strong capability radar can raise priority but not evidence.
+- Analyze hidden supply through factory capability, slaughter/capacity, byproduct handling, export readiness, market whitespace, and contactability.
 - `D1` is mature reference, not the main discovery prize.
 - `D2/D3` with `O3+` and verifiable next action is often the best discovery target.
 

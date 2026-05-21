@@ -9,9 +9,14 @@ import {
   DEVELOPMENT_DISTANCES,
   EVIDENCE_HEADERS,
   EVIDENCE_LEVELS,
+  EXPORT_APPROVAL_HEADERS,
+  FACTORY_CAPABILITY_HEADERS,
   LLM_EVALUATION_HEADERS,
   LOCAL_TASK_STATUSES,
   OMASUM_LEVELS,
+  RADAR_SCORE_HEADERS,
+  RADAR_SOURCE_HEALTH_HEADERS,
+  SLAUGHTER_CAPACITY_HEADERS,
   TRADE_ROUTE_HEADERS,
   TRADE_ROUTE_HISTORY_HEADERS,
 } from './lib/constants.mjs';
@@ -57,6 +62,11 @@ checkHeaders('data/collection-history.tsv', COLLECTION_HISTORY_HEADERS);
 const tradeRoutes = checkHeaders('data/trade-routes.tsv', TRADE_ROUTE_HEADERS);
 checkHeaders('data/trade-route-history.tsv', TRADE_ROUTE_HISTORY_HEADERS);
 const billRows = checkHeaders('data/bill-of-lading.tsv', BILL_OF_LADING_HEADERS);
+const factoryCapabilities = checkHeaders('data/factory-capabilities.tsv', FACTORY_CAPABILITY_HEADERS);
+const slaughterCapacity = checkHeaders('data/slaughter-capacity.tsv', SLAUGHTER_CAPACITY_HEADERS);
+const exportApprovals = checkHeaders('data/export-approvals.tsv', EXPORT_APPROVAL_HEADERS);
+const radarScores = checkHeaders('data/radar-scores.tsv', RADAR_SCORE_HEADERS);
+const radarHealth = checkHeaders('data/radar-source-health.tsv', RADAR_SOURCE_HEALTH_HEADERS);
 const evidence = checkHeaders('data/evidence.tsv', EVIDENCE_HEADERS);
 const llmEvaluations = checkHeaders('data/llm-evaluations.tsv', LLM_EVALUATION_HEADERS);
 const localTasks = existsSync('data/local-tasks.tsv') ? readTsv('data/local-tasks.tsv').rows : [];
@@ -129,6 +139,50 @@ for (const row of billRows) {
   if (row.development_distance !== 'D1') error(`${label}: bill rows must be development_distance D1`);
 }
 if (billRows.length) ok(`checked ${billRows.length} bill-of-lading row(s)`);
+
+for (const row of factoryCapabilities) {
+  const label = row.capability_id || row.legal_name || 'factory capability row';
+  if (!row.official_registration) error(`${label}: missing official_registration`);
+  if (!row.legal_name && !row.plant_name) error(`${label}: missing legal_name or plant_name`);
+  if (!row.country) error(`${label}: missing country`);
+  if (!/^https?:\/\//i.test(row.source_url || '')) error(`${label}: source_url must be an official http(s) URL`);
+}
+if (factoryCapabilities.length) ok(`checked ${factoryCapabilities.length} factory capability row(s)`);
+
+for (const row of slaughterCapacity) {
+  const label = row.capacity_id || row.plant_name || 'slaughter capacity row';
+  if (!row.official_registration) error(`${label}: missing official_registration`);
+  const heads = Number(row.slaughter_head_count);
+  if (!Number.isFinite(heads) || heads <= 0) error(`${label}: slaughter_head_count must be positive`);
+  if (!/^https?:\/\//i.test(row.source_url || '')) error(`${label}: source_url must be an official http(s) URL`);
+}
+if (slaughterCapacity.length) ok(`checked ${slaughterCapacity.length} slaughter capacity row(s)`);
+
+for (const row of exportApprovals) {
+  const label = row.approval_id || row.plant_name || 'export approval row';
+  if (!row.official_registration) error(`${label}: missing official_registration`);
+  if (!row.destination_market) error(`${label}: missing destination_market`);
+  if (!/^https?:\/\//i.test(row.source_url || '')) error(`${label}: source_url must be an official http(s) URL`);
+}
+if (exportApprovals.length) ok(`checked ${exportApprovals.length} export approval row(s)`);
+
+for (const row of radarScores) {
+  const label = row.radar_id || row.source_id || 'radar score row';
+  for (const field of ['official_score', 'supply_score', 'byproduct_score', 'export_readiness_score', 'market_whitespace_score', 'contactability_score', 'radar_score']) {
+    const value = Number(row[field]);
+    if (!Number.isFinite(value) || value < 0 || value > 100) error(`${label}: invalid ${field} ${row[field]}`);
+  }
+  if (row.priority_grade && !['A', 'B', 'C', 'D', 'E'].includes(row.priority_grade)) error(`${label}: invalid priority_grade ${row.priority_grade}`);
+}
+if (radarScores.length) ok(`checked ${radarScores.length} radar score row(s)`);
+
+for (const row of radarHealth) {
+  const label = row.source_id || 'radar source health row';
+  if (!['usable', 'manual_required', 'blocked', 'no_structured_rows', 'auth_required'].includes(row.status)) {
+    error(`${label}: invalid radar source status ${row.status}`);
+  }
+}
+if (radarHealth.length) ok(`checked ${radarHealth.length} radar source health row(s)`);
 
 for (const row of evidence) {
   const label = row.evidence_id || row.normalized_company_name || 'evidence row';
