@@ -53,6 +53,7 @@ These files contain reusable logic, prompts, and validation:
 
 ## Core Rules
 
+- Current release scope is `source_radar`: rank and prepare supplier verification work, not procurement decisions.
 - `npm run score` is the Codex Agent-mode evaluation entrypoint.
 - `npm run score:rules` is the offline rule baseline.
 - `npm run collect:radar` is the six-country capability radar collector.
@@ -74,6 +75,7 @@ These files contain reusable logic, prompts, and validation:
 - Capability radar facts can raise `radar_score` and `priority_grade`; they never upgrade evidence or create `D1`.
 - Optional bill-of-lading data can create E2/D1 mature references, but it is not required for discovering underdeveloped sources.
 - Generated management and assessment reports should use Chinese user-facing text; stable technical IDs, table names, and status codes may remain ASCII.
+- No Goods Radar output may approve supplier onboarding, payment, shipment, or purchase release. Those actions require separate human business approval outside this source-radar MVP.
 
 ## TSV-First Data Framework V2
 
@@ -94,7 +96,7 @@ Goods Radar stays TSV-first for the MVP, but the data roles are PostgreSQL-ready
 | `mature_transaction_reference` | `data/bill-of-lading.tsv` | Optional E2/D1 mature references for calibration, not a discovery prerequisite |
 | `score_audit` | `data/radar-scores.tsv`, `data/llm-evaluations.tsv`, `reports/evaluations/*` | Rule, radar, and Codex evaluation audit trail |
 
-The P0 closed loop is `supplier_master -> evidence_object -> offer_qc -> local_verification_task -> trial_review -> score_audit`. Empty P0 tables are treated as schema-only and must be activated before the project can claim a complete evidence-driven sourcing system.
+The P0 closed loop is `supplier_master -> evidence_object -> offer_qc -> local_verification_task -> trial_review -> score_audit`. Empty P0 tables are valid for a source-radar pilot only when the missing objects are converted into explicit capture tasks/intake packets. They are not enough for procurement decisions.
 
 ## P0 Capture Quality Rules
 

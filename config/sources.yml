@@ -1,0 +1,53 @@
+manual_imports:
+  - id: sample_leads
+    label: "样例线索（仅测试）"
+    path: "samples/leads.tsv"
+    type: "manual_tsv"
+    enabled: false
+
+official_sources:
+  - id: brazil_mapa_dipoa
+    country: "Brazil"
+    label: "巴西 MAPA / DIPOA 出口资格入口"
+    url: "https://www.gov.br/agricultura/pt-br/internacional/english/exporting/animal/animal-products/registro-e-habilitacao-para-estabelecimentos"
+    purpose: "寻找具备动物产品出口基础的企业；入口页不可直接升级证据。"
+    enabled: true
+  - id: paraguay_senacsa_frigorificos
+    country: "Paraguay"
+    label: "巴拉圭 SENACSA 出口 frigoríficos 名单"
+    url: "https://senacsa.gov.py/servicios/productos-de-origen-animal/lista-de-frigorificos-habilitados-por-cada-pais-habilitado/"
+    purpose: "寻找具备出口基础、可开发 Omasum 的候选肉厂。"
+    enabled: true
+  - id: uruguay_meats_exporters
+    country: "Uruguay"
+    label: "乌拉圭 Uruguay Meats 出口商目录"
+    url: "https://uymeats.com/exporters/"
+    purpose: "建立质量锚点和规范出口商池。"
+    enabled: true
+
+trade_data_sources:
+  - id: un_comtrade
+    label: "UN Comtrade HS0504 路线信号"
+    url: "https://comtradeapi.un.org/"
+    purpose: "用于国家和路线流向分析，不能直接证明 Omasum。需要 COMTRADE_API_KEY。"
+    enabled: false
+  - id: wits
+    label: "世界银行 WITS API"
+    url: "https://wits.worldbank.org/witsapiintro.aspx?lang=en"
+    purpose: "贸易流向交叉验证；路线背景，不升级供应商证据。"
+    enabled: false
+  - id: faostat
+    label: "FAOSTAT 畜牧背景数据"
+    url: "https://www.fao.org/faostat/"
+    purpose: "补充牛源和屠宰背景；国家背景，不升级供应商证据。"
+    enabled: false
+
+weak_signal_sources:
+  - id: google_maps
+    label: "地图弱信号"
+    purpose: "寻找 frigorífico、matadero、abatedouro、冷库和副产品节点；必须二次核实。"
+    enabled: false
+  - id: social_media
+    label: "Facebook / Instagram 弱信号"
+    purpose: "寻找 bucho、omaso、mondongo、副产品图片和本地流通信号；必须二次核实。"
+    enabled: false

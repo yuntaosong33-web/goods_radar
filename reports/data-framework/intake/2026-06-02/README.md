@@ -11,23 +11,23 @@
 | evidence | 10 | reports\data-framework\intake\2026-06-02\evidence-intake.tsv |
 | contacts | 10 | reports\data-framework\intake\2026-06-02\contacts-intake.tsv |
 | quotes | 10 | reports\data-framework\intake\2026-06-02\quotes-intake.tsv |
-| local_tasks | 8 | reports\data-framework\intake\2026-06-02\local-tasks-intake.tsv |
+| local_tasks | 0 | reports\data-framework\intake\2026-06-02\local-tasks-intake.tsv |
 | trials | 10 | reports\data-framework\intake\2026-06-02\trials-intake.tsv |
 
 ## 2. 供应商范围
 
 | 供应商 | 国家 | 优先级 | 雷达分 | 请求对象 |
 | --- | --- | --- | --- | --- |
-| FRIGORIFICO FRIGOMERC | Paraguay | A | 87 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| Frigorífico Carrasco | Uruguay | A | 83 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
+| FRIGORIFICO FRIGOMERC | Paraguay | A | 87 | evidence_object, contact_person, offer_qc, trial_review |
+| Frigorífico Carrasco | Uruguay | A | 83 | evidence_object, contact_person, offer_qc, trial_review |
 | A Frigorifico Paraguay | Paraguay | D | 40 | evidence_object, contact_person, offer_qc, trial_review |
 | C Subprodutos Bovinos | Brazil | D | 40 | evidence_object, contact_person, offer_qc, trial_review |
-| FRIGOCHORTI | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| FRIGORIFICO BELEN | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| FRIGORIFICO CONCEPCION | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| FRIGORIFICO FRIGOCHACO | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| FRIGORIFICO GUARANI C I | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
-| FRIGORIFICO LOMBARDO | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, local_verification_task, trial_review |
+| FRIGOCHORTI | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
+| FRIGORIFICO BELEN | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
+| FRIGORIFICO CONCEPCION | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
+| FRIGORIFICO FRIGOCHACO | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
+| FRIGORIFICO GUARANI C I | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
+| FRIGORIFICO LOMBARDO | Paraguay | D | 38 | evidence_object, contact_person, offer_qc, trial_review |
 
 ## 3. 使用规则
 

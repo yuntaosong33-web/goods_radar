@@ -1,6 +1,10 @@
 # Goods Radar
 
-Goods Radar is an Agent-mode sourcing radar for South American omasum. It discovers underdeveloped sources, grounds them in official/route/evidence data, lets Codex perform constrained sourcing judgment, and lets Node enforce auditability and hard rules.
+Goods Radar is an Agent-mode source radar for South American omasum. It discovers and prioritizes underdeveloped source candidates, grounds them in official/route/evidence data, lets Codex perform constrained sourcing judgment, and lets Node enforce auditability and hard rules.
+
+## Operating Scope
+
+This version is a **source radar**, not a procurement decision system. It can rank outreach targets, generate verification tasks, prepare Codex assessment prompts, and preserve audit trails. It must not approve supplier onboarding, payment, shipment, trial order release, or purchase decisions without separate human-verified P0 evidence, contact, quote/QC, local verification, and trial review records.
 
 ## Main Flow
 
@@ -9,6 +13,8 @@ collect sources -> collect capability radar -> scan leads -> collect route stats
 ```
 
 ## Quick Start
+
+Use npm when the local Node/npm toolchain is available:
 
 ```bash
 npm run doctor
@@ -22,7 +28,28 @@ npm run verify
 npm run weekly
 ```
 
-If npm is unavailable, use Node directly:
+If npm is unavailable or the Windows app-shim `node.exe` is blocked, use the project runner. It detects a working Node executable, including the bundled Codex desktop runtime when available:
+
+```powershell
+.\goods-radar.cmd doctor
+.\goods-radar.cmd collect
+.\goods-radar.cmd radar --fixture
+.\goods-radar.cmd scan --collect
+.\goods-radar.cmd routes --period 2024 --hs 0504
+.\goods-radar.cmd score --dry-run --limit 1
+.\goods-radar.cmd score --response-file samples/codex-evaluation-response.json --source-id py-senacsa-001
+.\goods-radar.cmd verify
+.\goods-radar.cmd weekly
+```
+
+If you know the exact Node path, set it explicitly:
+
+```powershell
+$env:GOODS_RADAR_NODE="C:\path\to\node.exe"
+.\goods-radar.cmd verify
+```
+
+Direct Node execution also works:
 
 ```bash
 node doctor.mjs
@@ -54,9 +81,10 @@ npm run score -- --dry-run
 npm run score -- --response-file samples/codex-evaluation-response.json
 npm run score -- --codex-bin path/to/codex
 npm run score -- --skip-apply --response-file samples/codex-evaluation-response.json
+npm run score -- --limit 10 --fallback-rules
 ```
 
-If Codex CLI cannot start, the prompt remains in `reports/llm-evaluations/`; run Codex in the app or another shell, save the JSON response, then rerun with `--response-file`.
+If Codex CLI cannot start, the prompt remains in `reports/llm-evaluations/`; run Codex in the app or another shell, save the JSON response, then rerun with `--response-file`. For source-radar operation, `--dry-run`, `--response-file`, and `--fallback-rules` are first-class paths; a blocked local Codex CLI must not stop rule scoring, P0 task generation, source review, or verification. `--fallback-rules` writes `engine=rule_baseline` audit rows and must not be represented as an LLM judgment.
 
 ## Capability Radar, Route Stats, And Optional Bill Validation
 
@@ -101,3 +129,11 @@ npm run verify
 ```
 
 The verifier checks data headers, canonical levels/statuses, route rows, capability radar rows, bill rows, LLM audit rows, report links, and pipeline formatting.
+
+When npm is unavailable:
+
+```powershell
+.\goods-radar.cmd test
+.\goods-radar.cmd doctor
+.\goods-radar.cmd verify
+```

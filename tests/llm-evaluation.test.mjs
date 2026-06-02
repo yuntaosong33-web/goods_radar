@@ -5,6 +5,7 @@ import {
   applyLlmAssessments,
   buildCodexEvaluationPrompt,
   buildEvaluationCases,
+  buildRuleBaselineAssessments,
   constrainLlmAssessment,
   extractJsonPayload,
   reportPathForAssessment,
@@ -177,6 +178,37 @@ test('applyLlmAssessments updates companies and writes audit rows', () => {
 test('extractJsonPayload reads fenced Codex JSON responses', () => {
   const payload = extractJsonPayload('Here is the result:\n```json\n[{ "source_id": "c1", "score": 61 }]\n```');
   assert.deepEqual(payload, [{ source_id: 'c1', score: 61 }]);
+});
+
+test('buildRuleBaselineAssessments creates source-radar fallback assessments', () => {
+  const cases = buildEvaluationCases({
+    mission: {},
+    companies: [
+      {
+        source_id: 'c-1',
+        normalized_company_name: 'Radar Only',
+        country: 'Uruguay',
+        source_type: 'official_list',
+        url_or_file: 'https://example.test/radar-only',
+        keywords_found: 'frigorifico',
+        omasum_level: 'O1',
+        evidence_level: 'E1',
+        development_distance: 'D2',
+        score: '58',
+        status: '未联系',
+        next_action: 'Ask for current video',
+      },
+    ],
+  });
+
+  const assessments = buildRuleBaselineAssessments(cases);
+
+  assert.equal(assessments.length, 1);
+  assert.equal(assessments[0].source_id, 'c-1');
+  assert.equal(assessments[0].evidence_level, 'E1');
+  assert.match(assessments[0].rationale, /规则基线兜底评估/);
+  assert.match(assessments[0].report_markdown, /不是采购决策|货源雷达/);
+  assert.deepEqual(assessments[0].citations, ['https://example.test/radar-only']);
 });
 
 test('reportPathForAssessment creates stable evaluation report paths', () => {

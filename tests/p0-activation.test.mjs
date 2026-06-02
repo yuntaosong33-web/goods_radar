@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  buildLocalVerificationTaskRows,
   buildP0ActivationModel,
   renderP0ActivationReport,
 } from '../lib/p0-activation.mjs';
@@ -88,4 +89,40 @@ test('renderP0ActivationReport emits a management worklist with guardrails', () 
   assert.match(report, /capture_contact_channel/);
   assert.match(report, /D1 仍需提单/);
   assert.match(report, /不得虚构证据/);
+});
+
+test('buildLocalVerificationTaskRows creates non-evidence P0 task rows without duplicates', () => {
+  const model = buildP0ActivationModel({
+    companies: [
+      {
+        source_id: 'c-high',
+        normalized_company_name: 'High Priority',
+        country: 'Uruguay',
+        score: '58',
+        radar_score: '83',
+        priority_grade: 'A',
+        development_distance: 'D2',
+      },
+    ],
+    localTasks: [],
+  });
+
+  const rows = buildLocalVerificationTaskRows({
+    suppliers: model.suppliers,
+    existingTasks: [],
+    createdAt: '2026-06-02',
+  });
+
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].company_key, 'uruguay:high priority');
+  assert.equal(rows[0].status, '待处理');
+  assert.equal(rows[0].due_date, '2026-06-09');
+  assert.match(rows[0].must_capture, /当前原料视频/);
+
+  const duplicateRows = buildLocalVerificationTaskRows({
+    suppliers: model.suppliers,
+    existingTasks: rows,
+    createdAt: '2026-06-02',
+  });
+  assert.equal(duplicateRows.length, 0);
 });

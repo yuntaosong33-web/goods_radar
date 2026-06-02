@@ -21,6 +21,7 @@ import {
   applyLlmAssessments,
   buildCodexEvaluationPrompt,
   buildEvaluationCases,
+  buildRuleBaselineAssessments,
   extractJsonPayload,
 } from './lib/llm-evaluation.mjs';
 import { formatRuleScoreSummary, runRuleScore } from './lib/rule-score.mjs';
@@ -97,6 +98,7 @@ const limit = Number(argValue('--limit') || '10');
 const sourceId = argValue('--source-id');
 const dryRun = hasFlag('--dry-run');
 const skipApply = hasFlag('--skip-apply');
+const fallbackRules = hasFlag('--fallback-rules') || process.env.GOODS_RADAR_CODEX_FALLBACK === 'rules';
 const codexBin = argValue('--codex-bin') || process.env.CODEX_BIN || 'codex';
 const responseFile = argValue('--response-file');
 const stamp = todayIso();
@@ -150,27 +152,36 @@ if (dryRun) {
 }
 
 let responseText = '';
+let assessments = [];
+let engine = 'codex';
 if (responseFile) {
   responseText = readFileSync(responseFile, 'utf8');
   console.log(`响应文件：${responseFile}`);
+  assessments = extractJsonPayload(responseText);
 } else {
   console.log(`Codex binary：${codexBin}`);
   try {
     responseText = runCodex(prompt, { codexBin, responseOut });
+    assessments = extractJsonPayload(responseText);
   } catch (err) {
+    if (!fallbackRules) {
+      console.error(err.message);
+      console.error('Prompt 已保存。请配置 CODEX_BIN 后重试，或使用 --response-file 再次运行。货源雷达兜底可加 --fallback-rules。');
+      process.exit(2);
+    }
     console.error(err.message);
-    console.error('Prompt 已保存。请配置 CODEX_BIN 后重试，或使用 --response-file 再次运行。');
-    process.exit(2);
+    console.error('Codex CLI 不可用，已使用规则基线生成 source-radar 兜底评估；这不是 LLM 判断，也不是采购决策。');
+    assessments = buildRuleBaselineAssessments(cases);
+    engine = 'rule_baseline';
   }
-  console.log(`响应文件：${responseOut}`);
+  if (engine === 'codex') console.log(`响应文件：${responseOut}`);
 }
 
-const assessments = extractJsonPayload(responseText);
 const { companies: updatedSubset, evaluations } = applyLlmAssessments({
   companies,
   cases,
   assessments,
-  engine: 'codex',
+  engine,
   evaluatedAt: stamp,
 });
 

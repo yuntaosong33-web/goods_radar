@@ -1,7 +1,7 @@
 {
   "name": "goods-radar",
   "version": "0.1.0",
-  "description": "南美 Omasum 本地寻货雷达 CLI",
+  "description": "南美 Omasum 货源雷达 CLI（非采购决策系统）",
   "type": "module",
   "private": true,
   "scripts": {

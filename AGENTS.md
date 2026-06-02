@@ -1,6 +1,8 @@
 # Goods Radar Agent Guide
 
-Goods Radar is an Agent-mode sourcing radar for South American omasum. Codex performs constrained sourcing judgment; Node scripts handle data collection, rule baselines, hard guardrails, audit logs, reports, and verification.
+Goods Radar is an Agent-mode source radar for South American omasum. Codex performs constrained sourcing judgment; Node scripts handle data collection, rule baselines, hard guardrails, audit logs, reports, and verification.
+
+This version is not a procurement decision system. It may rank outreach targets and prepare verification work, but it must not approve supplier onboarding, payment, shipment, or purchase release.
 
 ## Main Workflow
 
