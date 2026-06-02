@@ -46,8 +46,8 @@ test('buildSourceProbeModel summarizes staged acquisition without business write
     'un_comtrade',
     'argentina_senasa_registros',
   ]);
-  assert.match(model.next_management_actions.join('\n'), /Review blocked source/);
-  assert.match(model.next_management_actions.join('\n'), /Keep staged rows out of data/);
+  assert.match(model.next_management_actions.join('\n'), /检查受阻数据源/);
+  assert.match(model.next_management_actions.join('\n'), /暂存行在人工或受控导入器批准前不得写入 data\/\*/);
 });
 
 test('renderSourceProbeReport includes staging outputs and guardrails', () => {
@@ -63,10 +63,11 @@ test('renderSourceProbeReport includes staging outputs and guardrails', () => {
     }),
   });
 
-  assert.match(report, /Goods Radar Source Probe Report/);
+  assert.match(report, /Goods Radar 数据源探测报告/);
   assert.match(report, /2026-06-02/);
   assert.match(report, /reports_only/);
   assert.match(report, /uruguay_meats_exporters/);
   assert.match(report, /un_comtrade/);
-  assert.match(report, /route statistics never upgrade evidence/i);
+  assert.match(report, /路线统计不提升证据/);
+  assert.doesNotMatch(report, /Management Actions/);
 });

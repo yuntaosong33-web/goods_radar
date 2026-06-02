@@ -1,25 +1,25 @@
-# Goods Radar Buyer Profile
+# Goods Radar 买方画像
 
-This is the user preference and feedback layer. Update this file when the buyer corrects scores, changes sourcing priorities, or adds field experience.
+本文件是用户偏好和反馈层。当买方修正评分、改变寻源优先级或补充现场经验时，更新本文件。
 
-## Current Priority
+## 当前优先级
 
-- Find underdeveloped South American omasum sources before they are fully commoditized.
-- Favor source-side factories, slaughterhouses, byproduct processors, and cold-chain operators over pure brokers.
-- Treat mature shipment records as calibration and reference samples, not as the only discovery path.
+- 在南美 omasum 货源完全商品化之前，寻找未充分开发的源头。
+- 优先选择源头侧工厂、屠宰厂、副产品加工商和冷链运营方，而不是纯中间商。
+- 成熟出货记录用于校准和参考，不作为唯一发现路径。
 
-## Route Preference
+## 路线偏好
 
-- Destination routes of interest: Vietnam, Hong Kong, China.
-- Public route strength is useful for feasibility but not supplier identity.
-- Brazil route strength may increase urgency for Brazil candidates, but it cannot upgrade evidence.
+- 关注目的地路线：Vietnam、Hong Kong、China。
+- 公共路线强度可用于可行性判断，但不是供应商身份。
+- Brazil 路线强度可提升 Brazil 候选的紧迫度，但不能提升证据。
 
-## Evaluation Bias
+## 评估偏好
 
-- Do not over-reward already mature suppliers unless they provide a useful reference.
-- Prefer candidates that need video/local verification but have plausible source access.
-- Penalize vague product fit, agent-only access, mixed tripe risk, and unverifiable claims.
+- 除非成熟供应商能提供有用参考，否则不要过度奖励成熟供应商。
+- 优先选择需要视频/本地核实、但具备可信源头接触可能性的候选。
+- 惩罚产品匹配模糊、纯代理接触、混杂 tripe 风险和不可核实主张。
 
-## Feedback Log
+## 反馈日志
 
-- Initial rule:提单导入是可选验证/校准层，不是发现未开发货源的前置条件。
+- 初始规则：提单导入是可选验证/校准层，不是发现未开发货源的前置条件。

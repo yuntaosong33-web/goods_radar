@@ -1,37 +1,37 @@
-# Goods Radar P0 Import Plan
+# Goods Radar P0 导入计划
 
-Date: 2026-06-02
+日期：2026-06-02
 
-Write scope: reports_only
+写入范围：reports_only
 
-Import scope: manual_guarded_import_required
+导入范围：manual_guarded_import_required
 
-## Counts
+## 1. 统计
 
-| Metric | Count |
+| 指标 | 数量 |
 | --- | --- |
-| Draft rows reviewed | 0 |
-| Ready to import | 0 |
-| Duplicate keys | 0 |
-| Validation issues | 0 |
-| Blocked rows | 0 |
+| 已审阅草稿行 | 0 |
+| 可导入行 | 0 |
+| 重复键 | 0 |
+| 验证问题 | 0 |
+| 受阻行 | 0 |
 
-## Plan Rows
+## 2. 计划行
 
 _None_
 
-## Management Actions
+## 3. 管理动作
 
-- No draft rows are ready for business import.
-- No duplicate draft keys detected.
-- No draft validation issues detected.
-- Do not write data/* from intake drafts without explicit human approval.
-- Route statistics and capability radar facts remain outside evidence upgrades.
+- 暂无可导入业务表的草稿行。
+- 未发现草稿重复键。
+- 未发现草稿验证问题。
+- 没有明确人工批准时，不得从 intake 草稿写入 data/*。
+- 路线统计和能力雷达事实仍不得参与证据升级。
 
-## Guardrails
+## 4. 硬守门规则
 
-- This import plan does not write data/*.
-- Ready rows are still not business facts until human approval and a separate guarded import.
-- Route statistics never upgrade evidence.
-- Capability radar facts never upgrade evidence.
-- D1 requires bill-of-lading, invoice, trade, or mature transaction evidence.
+- 本导入计划不写入 data/*。
+- ready 行在人工批准和独立受控导入前，仍不是业务事实。
+- 路线统计不提升证据。
+- 能力雷达事实不提升证据。
+- D1 需要提单、发票、贸易或成熟交易证据。

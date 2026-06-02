@@ -63,9 +63,9 @@ test('renderP0IntakeDraftReport states drafts are not business writes', () => {
   });
   const report = renderP0IntakeDraftReport({ date: '2026-06-02', model, outputPaths: { trials: 'draft/trials.tsv' } });
 
-  assert.match(report, /Goods Radar P0 Intake Draft/);
+  assert.match(report, /Goods Radar P0 导入草稿/);
   assert.match(report, /Trial Supplier/);
   assert.match(report, /draft\/trials.tsv/);
-  assert.match(report, /does not write data\/\*/i);
-  assert.match(report, /guarded import/i);
+  assert.match(report, /不写入 data\/\*/);
+  assert.match(report, /受控导入/);
 });

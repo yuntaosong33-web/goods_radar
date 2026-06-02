@@ -49,7 +49,7 @@ test('buildP0IntakePacket creates action-specific intake rows without inventing 
   assert.match(quote.required_fields, /price/);
   assert.equal(trial.value_to_fill, '');
   assert.match(trial.required_fields, /quantity_mt/);
-  assert.match(packet.tables.evidence[0].guardrail, /never upgrade evidence/);
+  assert.match(packet.tables.evidence[0].guardrail, /不提升证据/);
 });
 
 test('renderP0IntakeIndex lists packet outputs and guardrails', () => {
@@ -62,9 +62,9 @@ test('renderP0IntakeIndex lists packet outputs and guardrails', () => {
     },
   });
 
-  assert.match(report, /Goods Radar P0 Intake Packet/);
+  assert.match(report, /Goods Radar P0 采集包/);
   assert.match(report, /High Priority/);
   assert.match(report, /evidence-intake.tsv/);
-  assert.match(report, /must not be imported as business facts/i);
+  assert.match(report, /不得直接作为业务事实导入/);
   assert.deepEqual(P0_INTAKE_HEADERS.slice(0, 4), ['intake_id', 'date', 'requested_object', 'source_id']);
 });

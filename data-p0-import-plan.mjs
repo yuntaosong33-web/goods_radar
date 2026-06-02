@@ -48,7 +48,7 @@ const report = renderP0ImportPlanReport({ date, model });
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, report, 'utf8');
 
-console.log(`P0 import plan written: ${out}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Ready to import: ${model.counts.ready_to_import}`);
-console.log(`Blocked rows: ${model.counts.blocked}`);
+console.log(`P0 导入计划已生成：${out}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`可导入行：${model.counts.ready_to_import}`);
+console.log(`受阻行：${model.counts.blocked}`);

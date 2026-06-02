@@ -65,9 +65,9 @@ test('renderP0IntakePreflightReport warns that ready rows still need guarded imp
   });
   const report = renderP0IntakePreflightReport({ date: '2026-06-02', model });
 
-  assert.match(report, /Goods Radar P0 Intake Preflight/);
+  assert.match(report, /Goods Radar P0 采集预检/);
   assert.match(report, /ready_for_mapping/);
   assert.match(report, /Trial Supplier/);
-  assert.match(report, /does not write data\/\*/i);
-  assert.match(report, /guarded import/i);
+  assert.match(report, /不写入 data\/\*/);
+  assert.match(report, /受控导入/);
 });

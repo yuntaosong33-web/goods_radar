@@ -37,9 +37,9 @@ const report = renderP0IntakePreflightReport({ date, model });
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, report, 'utf8');
 
-console.log(`P0 intake preflight written: ${out}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Rows reviewed: ${model.counts.rows_reviewed}`);
-console.log(`Pending fill: ${model.counts.pending_fill}`);
-console.log(`Incomplete: ${model.counts.incomplete}`);
-console.log(`Ready for mapping: ${model.counts.ready_for_mapping}`);
+console.log(`P0 采集预检报告已生成：${out}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`已审阅行：${model.counts.rows_reviewed}`);
+console.log(`待填写：${model.counts.pending_fill}`);
+console.log(`不完整：${model.counts.incomplete}`);
+console.log(`可映射：${model.counts.ready_for_mapping}`);

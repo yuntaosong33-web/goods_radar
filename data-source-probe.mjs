@@ -123,11 +123,11 @@ const model = buildSourceProbeModel({
 const report = renderSourceProbeReport({ date, model });
 writeFileSync(out, report, 'utf8');
 
-console.log(`Source probe report written: ${out}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Staging dir: ${stagingDir}`);
-console.log(`Leads: ${model.counts.leads}`);
-console.log(`Routes: ${model.counts.routes}`);
-console.log(`Capabilities: ${model.counts.capabilities}`);
-console.log(`Usable sources: ${model.usable_source_ids.length ? model.usable_source_ids.join(', ') : 'None'}`);
-console.log(`Blocked sources: ${model.blocked_source_ids.length ? model.blocked_source_ids.join(', ') : 'None'}`);
+console.log(`数据源探测报告已生成：${out}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`Staging 目录：${stagingDir}`);
+console.log(`线索：${model.counts.leads}`);
+console.log(`路线：${model.counts.routes}`);
+console.log(`能力事实：${model.counts.capabilities}`);
+console.log(`可用数据源：${model.usable_source_ids.length ? model.usable_source_ids.join(', ') : '无'}`);
+console.log(`受阻数据源：${model.blocked_source_ids.length ? model.blocked_source_ids.join(', ') : '无'}`);

@@ -62,10 +62,10 @@ for (const [name, path] of Object.entries(outputPaths)) {
 const indexPath = join(outDir, 'README.md');
 writeFileSync(indexPath, renderP0IntakeIndex({ date, packet, outputPaths }), 'utf8');
 
-console.log(`P0 intake packet written: ${outDir}`);
-console.log(`Index: ${indexPath}`);
-console.log(`Evidence requests: ${packet.counts.evidence}`);
-console.log(`Contact requests: ${packet.counts.contacts}`);
-console.log(`Quote/QC requests: ${packet.counts.quotes}`);
-console.log(`Local task requests: ${packet.counts.local_tasks}`);
-console.log(`Trial review requests: ${packet.counts.trials}`);
+console.log(`P0 采集包已生成：${outDir}`);
+console.log(`索引报告：${indexPath}`);
+console.log(`证据请求：${packet.counts.evidence}`);
+console.log(`联系人请求：${packet.counts.contacts}`);
+console.log(`报价/QC 请求：${packet.counts.quotes}`);
+console.log(`本地任务请求：${packet.counts.local_tasks}`);
+console.log(`试柜复盘请求：${packet.counts.trials}`);

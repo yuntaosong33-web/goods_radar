@@ -50,10 +50,10 @@ const report = renderStagingReviewReport({ date, model });
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, report, 'utf8');
 
-console.log(`Staging review report written: ${out}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Promote candidates: ${model.counts.promote_candidates}`);
-console.log(`Duplicates: ${model.counts.duplicates}`);
-console.log(`Needs fix: ${model.counts.needs_fix}`);
-console.log(`Unmatched capabilities: ${model.counts.unmatched_capabilities}`);
-console.log(`Blocked sources: ${model.blocked_source_ids.length ? model.blocked_source_ids.join(', ') : 'None'}`);
+console.log(`暂存数据审核报告已生成：${out}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`晋级候选：${model.counts.promote_candidates}`);
+console.log(`重复线索：${model.counts.duplicates}`);
+console.log(`需修复线索：${model.counts.needs_fix}`);
+console.log(`未匹配能力事实：${model.counts.unmatched_capabilities}`);
+console.log(`受阻数据源：${model.blocked_source_ids.length ? model.blocked_source_ids.join(', ') : '无'}`);

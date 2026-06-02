@@ -8,11 +8,13 @@ import {
   COLLECTION_HISTORY_HEADERS,
   COMPANY_HEADERS,
   CONTACT_HEADERS,
+  COUNTRY_CONTEXT_HEADERS,
   EVIDENCE_HEADERS,
   EXPORT_APPROVAL_HEADERS,
   FACTORY_CAPABILITY_HEADERS,
   LLM_EVALUATION_HEADERS,
   LOCAL_TASK_HEADERS,
+  LOGISTICS_CONTEXT_HEADERS,
   QUOTE_HEADERS,
   RADAR_SCORE_HEADERS,
   RADAR_SOURCE_HEALTH_HEADERS,
@@ -21,6 +23,8 @@ import {
   TRADE_ROUTE_HISTORY_HEADERS,
   TRIAL_HEADERS,
 } from './lib/constants.mjs';
+import { loadMission } from './lib/config.mjs';
+import { buildCountryContextModel } from './lib/country-context.mjs';
 import { buildDataFrameworkModel, summarizeTable } from './lib/data-framework.mjs';
 import { buildDataOpsSummary, renderDataOpsSummaryReport } from './lib/data-ops-summary.mjs';
 import { buildP0ActivationModel } from './lib/p0-activation.mjs';
@@ -28,6 +32,8 @@ import { buildP0ImportPlanModel } from './lib/p0-import-plan.mjs';
 import { buildP0IntakeDraftModel } from './lib/p0-intake-draft.mjs';
 import { P0_INTAKE_HEADERS } from './lib/p0-intake.mjs';
 import { buildP0IntakePreflightModel } from './lib/p0-intake-preflight.mjs';
+import { buildLogisticsContextModel } from './lib/logistics-context.mjs';
+import { buildSourceEvaluationModel } from './lib/source-evaluation.mjs';
 import { buildSourceProbeModel } from './lib/source-probe.mjs';
 import { buildStagingReviewModel } from './lib/staging-review.mjs';
 import { readTsv } from './lib/tsv.mjs';
@@ -111,6 +117,18 @@ function sourceProbeModel(stagingDir) {
   });
 }
 
+function sourceEvaluationModel(stagingDir, mission) {
+  return buildSourceEvaluationModel({
+    stagedLeads: readRows(join(stagingDir, 'auto-leads.tsv'), AUTO_LEAD_HEADERS),
+    stagedCapabilities: readRows(join(stagingDir, 'factory-capabilities.tsv'), FACTORY_CAPABILITY_HEADERS),
+    stagedCapacities: readRows(join(stagingDir, 'slaughter-capacity.tsv'), SLAUGHTER_CAPACITY_HEADERS),
+    stagedApprovals: readRows(join(stagingDir, 'export-approvals.tsv'), EXPORT_APPROVAL_HEADERS),
+    stagedRoutes: readRows(join(stagingDir, 'trade-routes.tsv'), TRADE_ROUTE_HEADERS),
+    mission,
+    limit: 10,
+  });
+}
+
 function stagingReviewModel(stagingDir) {
   return buildStagingReviewModel({
     companies: readRows('data/companies.tsv', COMPANY_HEADERS),
@@ -155,10 +173,20 @@ const out = argValue('--out') || `reports/data-framework/${date}-ops-summary.md`
 const limit = Number(argValue('--limit') || 10);
 const intake = intakeRows(intakeDir);
 const intakeDraft = buildP0IntakeDraftModel({ rows: intake });
+const { mission } = loadMission();
 
 const model = buildDataOpsSummary({
   dataFrameworkModel: dataFrameworkModel(),
   sourceProbeModel: sourceProbeModel(stagingDir),
+  countryContextModel: buildCountryContextModel({
+    rows: readRows(join(stagingDir, 'country-context.tsv'), COUNTRY_CONTEXT_HEADERS),
+    history: [],
+  }),
+  logisticsContextModel: buildLogisticsContextModel({
+    rows: readRows(join(stagingDir, 'logistics-context.tsv'), LOGISTICS_CONTEXT_HEADERS),
+    history: [],
+  }),
+  sourceEvaluationModel: sourceEvaluationModel(stagingDir, mission),
   stagingReviewModel: stagingReviewModel(stagingDir),
   p0ActivationModel: p0ActivationModel(Number.isFinite(limit) && limit > 0 ? limit : 10),
   intakePreflightModel: buildP0IntakePreflightModel({ rows: intake }),
@@ -178,6 +206,6 @@ const model = buildDataOpsSummary({
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, renderDataOpsSummaryReport({ date, model }), 'utf8');
 
-console.log(`Data ops summary written: ${out}`);
-console.log(`Overall status: ${model.overall_status}`);
-console.log(`Ready for business import: ${model.ready_for_business_import ? 'yes' : 'no'}`);
+console.log(`数据运营总览已生成：${out}`);
+console.log(`整体状态：${model.overall_status}`);
+console.log(`业务导入就绪：${model.ready_for_business_import ? '是' : '否'}`);

@@ -105,10 +105,10 @@ test('renderP0ImportPlanReport states imports are guarded and do not change data
   });
   const report = renderP0ImportPlanReport({ date: '2026-06-02', model });
 
-  assert.match(report, /Goods Radar P0 Import Plan/);
+  assert.match(report, /Goods Radar P0 导入计划/);
   assert.match(report, /Ready Supplier/);
-  assert.match(report, /Write scope: reports_only/);
-  assert.match(report, /does not write data\/\*/i);
-  assert.match(report, /human approval/i);
-  assert.match(report, /Route statistics never upgrade evidence/i);
+  assert.match(report, /写入范围：reports_only/);
+  assert.match(report, /不写入 data\/\*/);
+  assert.match(report, /人工批准/);
+  assert.match(report, /路线统计不提升证据/);
 });

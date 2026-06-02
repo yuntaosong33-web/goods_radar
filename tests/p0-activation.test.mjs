@@ -57,7 +57,7 @@ test('buildP0ActivationModel ranks suppliers and turns P0 gaps into capture acti
     'complete_existing_local_task',
     'record_trial_review_after_sample_or_container',
   ]);
-  assert.match(model.next_management_actions.join('\n'), /Capture current-batch evidence/);
+  assert.match(model.next_management_actions.join('\n'), /当前批次证据/);
 });
 
 test('renderP0ActivationReport emits a management worklist with guardrails', () => {
@@ -83,9 +83,9 @@ test('renderP0ActivationReport emits a management worklist with guardrails', () 
 
   const report = renderP0ActivationReport({ date: '2026-06-02', model });
 
-  assert.match(report, /Goods Radar P0 Activation/);
+  assert.match(report, /Goods Radar P0 激活/);
   assert.match(report, /High Priority/);
   assert.match(report, /capture_contact_channel/);
-  assert.match(report, /D1 still requires transaction evidence/i);
-  assert.match(report, /must not invent evidence/i);
+  assert.match(report, /D1 仍需提单/);
+  assert.match(report, /不得虚构证据/);
 });

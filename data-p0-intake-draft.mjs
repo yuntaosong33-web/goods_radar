@@ -52,8 +52,8 @@ writeTsv(outputPaths.local_tasks, LOCAL_TASK_HEADERS, model.drafts.local_tasks);
 writeTsv(outputPaths.trials, TRIAL_HEADERS, model.drafts.trials);
 writeFileSync(join(outDir, 'DRAFT.md'), renderP0IntakeDraftReport({ date, model, outputPaths }), 'utf8');
 
-console.log(`P0 intake draft written: ${outDir}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Ready rows: ${model.counts.ready_rows}`);
-console.log(`Skipped rows: ${model.counts.skipped_rows}`);
-console.log(`Validation issues: ${model.counts.validation_issues}`);
+console.log(`P0 导入草稿已生成：${outDir}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`ready 行：${model.counts.ready_rows}`);
+console.log(`跳过行：${model.counts.skipped_rows}`);
+console.log(`验证问题：${model.counts.validation_issues}`);

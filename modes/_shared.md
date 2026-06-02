@@ -1,12 +1,12 @@
-# Goods Radar Shared Rules
+# Goods Radar 共享规则
 
-This file is the system rule layer for Agent-mode evaluation. User-specific sourcing preferences belong in `modes/_profile.md` or `config/mission.yml`.
+本文件是 Agent-mode 评估的系统规则层。用户特定寻源偏好放在 `modes/_profile.md` 或 `config/mission.yml`。
 
-## Sources Of Truth
+## 事实来源
 
-Always ground evaluation in project data:
+评估必须基于项目数据：
 
-- `config/mission.yml` or `config/mission.example.yml`
+- `config/mission.yml` 或 `config/mission.example.yml`
 - `data/companies.tsv`
 - `data/factory-capabilities.tsv`
 - `data/slaughter-capacity.tsv`
@@ -18,37 +18,37 @@ Always ground evaluation in project data:
 - `data/local-tasks.tsv`
 - `docs/source-audit.md`
 
-## Hard Guardrails
+## 硬守门规则
 
-- Public route statistics only affect `route_feasibility`; they never raise `evidence_level`.
-- Capability radar facts only affect `radar_score`, `priority_grade`, and sourcing rationale; they never raise `evidence_level`.
-- Do not mark `D1` unless bill-of-lading, trade, invoice, or mature transaction evidence exists.
-- Do not invent suppliers, registrations, shipments, buyers, prices, ports, certificates, photos, or visits.
-- Do not convert weak web text into supplier proof. Official lists need registration or structured source context.
-- Missing current media, local verification, or shipment evidence means the next action should request proof rather than assume readiness.
-- The goal is underdeveloped sourcing potential, not merely already-mature traded suppliers.
-- Hidden supply analysis should look for capacity, byproduct handling, export readiness, cold-chain path, and market whitespace before mature bills appear.
+- 公共路线统计只影响 `route_feasibility`，永不提升 `evidence_level`。
+- 能力雷达事实只影响 `radar_score`、`priority_grade` 和寻源理由，永不提升 `evidence_level`。
+- 除非存在提单、贸易、发票或成熟交易证据，否则不得标记 `D1`。
+- 不得虚构供应商、注册号、出货、买方、价格、港口、证书、照片或拜访。
+- 不得把弱网页文本转化为供应商证明；官方名单需要注册号或结构化来源语境。
+- 缺少当前媒体、本地核实或出货证据时，下一步应索取证明，而不是假设已就绪。
+- 目标是发现未充分开发的源头潜力，而不只是寻找已经成熟交易的供应商。
+- 隐形供给分析应在成熟提单出现前观察产能、副产品处理、出口准备度、冷链路径和市场空白。
 
-## Canonical Levels
+## 标准等级
 
-- Omasum confirmation: `O0` to `O5`
-- Evidence level: `E0` to `E5`
-- Development distance: `D1` to `D5`
+- Omasum 确认：`O0` 到 `O5`
+- 证据等级：`E0` 到 `E5`
+- 开发距离：`D1` 到 `D5`
 
-Preferred targets are usually `D2/D3` with credible official or operational signals and a clear next verification action.
+优先目标通常是具备可信官方或运营信号、且下一步核实动作清晰的 `D2/D3`。
 
-## Canonical Statuses
+## 标准状态
 
-Use only these company statuses:
+只能使用以下公司状态：
 
-`未联系`, `已联系`, `要视频`, `待本地核实`, `待拜访`, `试加工`, `试柜`, `复购`, `观察`, `淘汰`
+`未联系`, `已联系`, `要视频`, `待本地核实`, `待报价`, `试加工`, `试柜`, `复购`, `观察`, `淘汰`
 
-## Evidence Interpretation
+## 证据解释
 
-- `E1`: official list, website, weak signal, or manually entered lead.
-- `E2`: bill of lading, customs/trade detail, invoice, or transaction record.
-- `E3`: current photos or video.
-- `E4`: local/field verification.
-- `E5`: trial shipment, repeat purchase, or confirmed transaction performance.
+- `E1`：官方名单、官网、弱信号或人工录入线索。
+- `E2`：提单、海关/贸易明细、发票或交易记录。
+- `E3`：当前照片或视频。
+- `E4`：本地/现场核实。
+- `E5`：试柜、复购或已确认交易表现。
 
-When uncertain, keep the lower evidence level and ask for the missing proof.
+不确定时，保持较低证据等级，并要求补充缺失证明。

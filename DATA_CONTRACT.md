@@ -57,6 +57,9 @@ These files contain reusable logic, prompts, and validation:
 - `npm run score:rules` is the offline rule baseline.
 - `npm run collect:radar` is the six-country capability radar collector.
 - `npm run data:framework` generates the TSV-first data framework management report.
+- `npm run data:country` collects World Bank country macro context under `reports/data-framework/`.
+- `npm run data:logistics` collects World Bank logistics macro context under `reports/data-framework/`.
+- `npm run data:initial` writes the Chinese initial supplier assessment report from staged real-source rows.
 - `npm run data:intake` creates fill-in TSV intake packets for P0 capture actions under `reports/data-framework/intake/`.
 - `npm run data:intake:check` reviews filled intake packets before any guarded import or business-table write.
 - `npm run data:intake:draft` maps `ready_for_mapping` intake rows into schema-shaped draft TSVs under `reports/`, not `data/*`.
@@ -64,11 +67,13 @@ These files contain reusable logic, prompts, and validation:
 - `npm run data:ops` writes a one-page data operations cockpit summarizing source, staging, P0, intake, draft, import-plan, and import readiness.
 - `npm run data:p0` ranks supplier-level P0 gaps and turns missing evidence/contact/offer/task/trial objects into capture actions without writing `data/*`.
 - `npm run data:probe` runs a staged source-acquisition probe and writes only under `reports/data-framework/`.
+- `npm run data:source:evaluate` runs an initial supplier assessment on real-source staging rows and writes only under `reports/data-framework/`.
 - `npm run data:review` reviews staged probe rows for duplicates, provenance gaps, and guarded promotion candidates without writing `data/*`.
 - Codex can reason, rank, and explain, but Node applies hard evidence and route guardrails before writing data.
 - Public statistics never upgrade evidence; they only affect `route_feasibility`.
 - Capability radar facts can raise `radar_score` and `priority_grade`; they never upgrade evidence or create `D1`.
 - Optional bill-of-lading data can create E2/D1 mature references, but it is not required for discovering underdeveloped sources.
+- Generated management and assessment reports should use Chinese user-facing text; stable technical IDs, table names, and status codes may remain ASCII.
 
 ## TSV-First Data Framework V2
 
@@ -110,6 +115,10 @@ These checks keep relationship, commercial, and trial data PostgreSQL-ready with
 - P0 closed-loop gaps and recommended management actions;
 - hard guardrail reminders that route statistics and capability radar facts never upgrade evidence, and D1 still requires transaction evidence.
 
+`npm run data:country` collects official World Bank country macro context such as livestock production index and food production index for the target South American countries. It writes `country-context.tsv` under the staging directory and a country context management report. These rows enrich prioritization rationale and national supply background only; they never upgrade supplier evidence or create `D1`.
+
+`npm run data:logistics` collects official World Bank logistics context such as Logistics Performance Index and container port traffic for the target South American countries. It writes `logistics-context.tsv` under the staging directory and a logistics context management report. These rows enrich route feasibility checks and outreach sequencing only; they never upgrade supplier evidence or create `D1`.
+
 `npm run data:intake` creates fill-in TSV packets for the current P0 worklist. These files prefill supplier identity, requested object, required fields, acceptance criteria, and guardrails, but leave `value_to_fill` empty. They are operational templates only and must not be imported as business facts until a human supplies verified values.
 
 Filled intake values use semicolon-separated `field=value` pairs in `value_to_fill`, for example `contact_name=Maria; whatsapp=+598...; role=sales`. `npm run data:intake:check` classifies each row as `pending_fill`, `incomplete`, or `ready_for_mapping`. A `ready_for_mapping` row is still not a business fact until it passes human review and a guarded import into the proper TSV schema.
@@ -123,5 +132,9 @@ Filled intake values use semicolon-separated `field=value` pairs in `value_to_fi
 `npm run data:p0` reads supplier master, radar scores, contacts, evidence, quotes, local tasks, and trials. It writes a prioritized P0 activation worklist under `reports/data-framework/`, showing which suppliers need current-batch evidence, contact channels, offer/QC records, local verification tasks, or trial reviews. It is a management report only and must not invent facts or write `data/*`.
 
 `npm run data:probe` attempts staged acquisition from configured lead sources, route sources, and capability-radar derivation. It writes probe outputs such as staged leads, route signals, radar rows, source health, and a source probe report under `reports/data-framework/`; it must not promote rows into `data/*` by itself.
+
+`npm run data:source:evaluate` reads real-source staging rows and runs a conservative initial supplier assessment. The report combines rule score, radar score, source provenance, route feasibility, country macro context, logistics context, and guardrail notes. Public route signals may affect route feasibility, official capability facts may affect radar score or priority grade, country context may enrich prioritization rationale, and logistics context may enrich route feasibility checks, but none of these source types upgrade `evidence_level` or create `D1`.
+
+`npm run data:initial` reads source evaluation rows plus country/logistics context from a staging directory and writes a Chinese initial supplier assessment report. It is intended as the project-facing management output for early supplier ranking, data-source status, P0 gaps, and next outreach actions; it is reports-only and must not write `data/*`.
 
 `npm run data:review` reads a probe staging directory and compares staged rows with the current supplier master. It classifies staged leads as `promote_candidate`, `duplicate`, or `needs_fix`, matches capability facts to existing companies when possible, and keeps route rows as route-only management evidence. Promotion into `data/*` remains a separate guarded import decision.

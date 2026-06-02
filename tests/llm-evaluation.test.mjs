@@ -74,9 +74,9 @@ test('buildCodexEvaluationPrompt requires JSON output and forbids public route e
 
   assert.match(prompt, /JSON/);
   assert.match(prompt, /route_feasibility/);
-  assert.match(prompt, /must not raise evidence_level/i);
-  assert.match(prompt, /hidden supply/i);
-  assert.match(prompt, /negative space/i);
+  assert.match(prompt, /不能提升 evidence_level/);
+  assert.match(prompt, /隐形供给/);
+  assert.match(prompt, /负空间/);
   assert.match(prompt, /source_id/);
 });
 
@@ -128,8 +128,8 @@ test('constrainLlmAssessment caps evidence and blocks D1 without bill or trade e
   assert.equal(result.evidence_level, 'E1');
   assert.equal(result.development_distance, 'D2');
   assert.equal(result.score, 93);
-  assert.match(result.guardrail_notes, /evidence_level capped/);
-  assert.match(result.guardrail_notes, /D1 blocked/);
+  assert.match(result.guardrail_notes, /evidence_level 已被限制为/);
+  assert.match(result.guardrail_notes, /D1 已被阻止/);
   assert.equal(result.status, '');
   assert.equal(result.report_markdown, '# Report');
 });
@@ -169,7 +169,7 @@ test('applyLlmAssessments updates companies and writes audit rows', () => {
   assert.equal(updated[0].development_distance, 'D2');
   assert.equal(evaluations[0].engine, 'codex');
   assert.equal(evaluations[0].llm_score, '72');
-  assert.match(evaluations[0].guardrail_notes, /capped/);
+  assert.match(evaluations[0].guardrail_notes, /已被限制/);
   assert.match(evaluations[0].report_path, /reports\/evaluations\/2026-05-20-c1.md/);
   assert.match(evaluations[0].report_markdown, /A-G report/);
 });

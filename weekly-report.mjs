@@ -29,6 +29,20 @@ function inlineList(value) {
   return items.map(item => `  - ${item}`).join('\n');
 }
 
+function translateRadarText(value) {
+  return String(value || '')
+    .replace(/official factory capability present/g, '存在官方工厂能力事实')
+    .replace(/plant-level slaughter\/capacity signal present/g, '存在工厂级屠宰/产能信号')
+    .replace(/export approval\/readiness signal present/g, '存在出口批准/准备度信号')
+    .replace(/official capability unknown/g, '官方能力未知')
+    .replace(/slaughter\/capacity unknown/g, '屠宰/产能未知')
+    .replace(/export approval unknown/g, '出口批准未知')
+    .replace(/market whitespace unknown because no bill dataset is loaded/g, '因未加载提单数据集，市场空白仍未知')
+    .replace(/Contact plant or local verifier; ask for current omasum\/librillo handling video, weekly headcount, and export certificate path\./g, '联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。')
+    .replace(/Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia\./g, '询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。')
+    .replace(/Confirm export certificate experience, approved markets, and cold-chain route to port\./g, '确认出口证书经验、已批准市场和到港口的冷链路径。');
+}
+
 function taskCards(rows) {
   if (!rows.length) return '_暂无_';
   return rows.map((row, index) => [
@@ -130,8 +144,8 @@ ${mdTable(
     countryLabel(row.country),
     row.radar_score,
     row.priority_grade,
-    row.invisible_supply_rationale,
-    row.recommended_verification,
+    translateRadarText(row.invisible_supply_rationale),
+    translateRadarText(row.recommended_verification),
   ]),
 )}
 
@@ -144,7 +158,7 @@ ${mdTable(
     countryLabel(row.country),
     row.radar_score,
     row.priority_grade,
-    row.recommended_verification,
+    translateRadarText(row.recommended_verification),
   ]),
 )}
 

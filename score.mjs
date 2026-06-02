@@ -75,12 +75,12 @@ function writeEvaluationReports(evaluations) {
   for (const evaluation of evaluations) {
     if (!evaluation.report_markdown) continue;
     const header = [
-      `# Goods Radar Evaluation: ${evaluation.normalized_company_name}`,
+      `# Goods Radar 评估：${evaluation.normalized_company_name}`,
       '',
-      `**Date:** ${evaluation.evaluated_at}`,
-      `**Source ID:** ${evaluation.source_id}`,
-      `**Score:** ${evaluation.final_score}/100`,
-      `**Levels:** ${evaluation.omasum_level}/${evaluation.evidence_level}/${evaluation.development_distance}`,
+      `**日期：** ${evaluation.evaluated_at}`,
+      `**来源 ID：** ${evaluation.source_id}`,
+      `**评分：** ${evaluation.final_score}/100`,
+      `**等级：** ${evaluation.omasum_level}/${evaluation.evidence_level}/${evaluation.development_distance}`,
       '',
       '---',
       '',
@@ -115,7 +115,7 @@ const companies = sourceId
   : baseline.scoredRows.slice(0, limit);
 
 if (!companies.length) {
-  console.error(sourceId ? `No company found for --source-id ${sourceId}` : 'No companies to evaluate');
+  console.error(sourceId ? `未找到 --source-id ${sourceId} 对应公司` : '没有可评估公司');
   process.exit(1);
 }
 
@@ -137,32 +137,32 @@ const prompt = buildCodexEvaluationPrompt(cases, {
 });
 writePrompt(prompt, promptOut);
 
-console.log('Goods Radar Codex LLM Evaluator');
+console.log('Goods Radar Codex LLM 评估器');
 console.log('================================');
 console.log(formatRuleScoreSummary(baseline));
 console.log('');
-console.log(`Cases: ${cases.length}`);
-console.log(`Prompt: ${promptOut}`);
+console.log(`案例数：${cases.length}`);
+console.log(`Prompt：${promptOut}`);
 
 if (dryRun) {
-  console.log('Dry run: prompt generated, Codex not invoked, data not changed.');
+  console.log('Dry run：prompt 已生成，未调用 Codex，未修改数据。');
   process.exit(0);
 }
 
 let responseText = '';
 if (responseFile) {
   responseText = readFileSync(responseFile, 'utf8');
-  console.log(`Response: ${responseFile}`);
+  console.log(`响应文件：${responseFile}`);
 } else {
-  console.log(`Codex binary: ${codexBin}`);
+  console.log(`Codex binary：${codexBin}`);
   try {
     responseText = runCodex(prompt, { codexBin, responseOut });
   } catch (err) {
     console.error(err.message);
-    console.error('Prompt was saved. Retry after configuring CODEX_BIN, or run again with --response-file.');
+    console.error('Prompt 已保存。请配置 CODEX_BIN 后重试，或使用 --response-file 再次运行。');
     process.exit(2);
   }
-  console.log(`Response: ${responseOut}`);
+  console.log(`响应文件：${responseOut}`);
 }
 
 const assessments = extractJsonPayload(responseText);
@@ -185,7 +185,7 @@ if (!skipApply) {
   reportsWritten = writeEvaluationReports(evaluations);
 }
 
-console.log(`Assessments parsed: ${assessments.length}`);
-console.log(`Evaluations written: ${skipApply ? 0 : evaluations.length}`);
-console.log(`Reports written: ${skipApply ? 0 : reportsWritten}`);
-if (skipApply) console.log('Skip apply: companies.tsv, local-tasks.tsv, llm-evaluations.tsv, and reports were not changed.');
+console.log(`已解析评估：${assessments.length}`);
+console.log(`已写入评估：${skipApply ? 0 : evaluations.length}`);
+console.log(`已写入报告：${skipApply ? 0 : reportsWritten}`);
+if (skipApply) console.log('Skip apply：companies.tsv、local-tasks.tsv、llm-evaluations.tsv 和 reports 均未修改。');

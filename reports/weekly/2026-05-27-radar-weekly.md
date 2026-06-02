@@ -51,33 +51,33 @@
 
 | 公司 | 国家 | Radar | 优先级 | 隐形货源判断 | 验证动作 |
 | --- | --- | --- | --- | --- | --- |
-| FRIGORIFICO FRIGOMERC | 巴拉圭 | 87 | A | official factory capability present; plant-level slaughter/capacity signal present; export approval/readiness signal present; market whitespace unknown because no bill dataset is loaded | Contact plant or local verifier; ask for current omasum/librillo handling video, weekly headcount, and export certificate path. |
-| Frigorífico Carrasco | 乌拉圭 | 83 | A | official factory capability present; plant-level slaughter/capacity signal present; export approval/readiness signal present; market whitespace unknown because no bill dataset is loaded | Contact plant or local verifier; ask for current omasum/librillo handling video, weekly headcount, and export certificate path. |
-| A Frigorifico Paraguay | 巴拉圭 | 40 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| C Subprodutos Bovinos | 巴西 | 40 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| COOPERATIVA MULTIACTIVA NEULAND | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| MATADERO FRIGORIFICO SAN ANTONIO | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO GUARANI C I | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO LOMBARDO | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGOCHORTI | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO FRIGOCHACO | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO BELEN | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO CONCEPCION | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| AVICAR FOODS | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO VICTORIA | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| FRIGORIFICO NORTE | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| MATADERO FRIGORIFICO CONCEPCION ROQUE ALONSO | 巴拉圭 | 38 | D | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia. |
-| Frigorifico PUL | 乌拉圭 | 26 | E | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Confirm export certificate experience, approved markets, and cold-chain route to port. |
-| Frigorífico Casa Blanca | 乌拉圭 | 26 | E | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Confirm export certificate experience, approved markets, and cold-chain route to port. |
-| FRIGORÍFICO Schneck | 乌拉圭 | 26 | E | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Confirm export certificate experience, approved markets, and cold-chain route to port. |
-| FRIGOSALTO – Somicar | 乌拉圭 | 26 | E | official capability unknown; slaughter/capacity unknown; export approval unknown; market whitespace unknown because no bill dataset is loaded | Confirm export certificate experience, approved markets, and cold-chain route to port. |
+| FRIGORIFICO FRIGOMERC | 巴拉圭 | 87 | A | 存在官方工厂能力事实; 存在工厂级屠宰/产能信号; 存在出口批准/准备度信号; 因未加载提单数据集，市场空白仍未知 | 联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。 |
+| Frigorífico Carrasco | 乌拉圭 | 83 | A | 存在官方工厂能力事实; 存在工厂级屠宰/产能信号; 存在出口批准/准备度信号; 因未加载提单数据集，市场空白仍未知 | 联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。 |
+| A Frigorifico Paraguay | 巴拉圭 | 40 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| C Subprodutos Bovinos | 巴西 | 40 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| COOPERATIVA MULTIACTIVA NEULAND | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| MATADERO FRIGORIFICO SAN ANTONIO | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO GUARANI C I | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO LOMBARDO | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGOCHORTI | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO FRIGOCHACO | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO BELEN | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO CONCEPCION | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| AVICAR FOODS | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO VICTORIA | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| FRIGORIFICO NORTE | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| MATADERO FRIGORIFICO CONCEPCION ROQUE ALONSO | 巴拉圭 | 38 | D | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。 |
+| Frigorifico PUL | 乌拉圭 | 26 | E | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 确认出口证书经验、已批准市场和到港口的冷链路径。 |
+| Frigorífico Casa Blanca | 乌拉圭 | 26 | E | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 确认出口证书经验、已批准市场和到港口的冷链路径。 |
+| FRIGORÍFICO Schneck | 乌拉圭 | 26 | E | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 确认出口证书经验、已批准市场和到港口的冷链路径。 |
+| FRIGOSALTO – Somicar | 乌拉圭 | 26 | E | 官方能力未知; 屠宰/产能未知; 出口批准未知; 因未加载提单数据集，市场空白仍未知 | 确认出口证书经验、已批准市场和到港口的冷链路径。 |
 
 ## 5. Top 5 线下验证点位
 
 | 公司 | 国家 | Radar | 优先级 | 动作 |
 | --- | --- | --- | --- | --- |
-| FRIGORIFICO FRIGOMERC | 巴拉圭 | 87 | A | Contact plant or local verifier; ask for current omasum/librillo handling video, weekly headcount, and export certificate path. |
-| Frigorífico Carrasco | 乌拉圭 | 83 | A | Contact plant or local verifier; ask for current omasum/librillo handling video, weekly headcount, and export certificate path. |
+| FRIGORIFICO FRIGOMERC | 巴拉圭 | 87 | A | 联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。 |
+| Frigorífico Carrasco | 乌拉圭 | 83 | A | 联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。 |
 
 ## 6. 本周 Top 5 本地核实任务
 

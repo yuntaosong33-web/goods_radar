@@ -76,7 +76,7 @@ test('missing radar fields remain unknown and do not create market whitespace wi
 
   assert.equal(result.supply_score, '0');
   assert.equal(result.market_whitespace_score, '0');
-  assert.match(result.invisible_supply_rationale, /unknown/i);
+  assert.match(result.invisible_supply_rationale, /未知/);
 });
 
 test('buildRadarScores does not alter O/E/D evidence guardrails', () => {

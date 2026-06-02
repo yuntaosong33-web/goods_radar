@@ -50,10 +50,10 @@ const report = renderP0ActivationReport({ date, model });
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, report, 'utf8');
 
-console.log(`P0 activation report written: ${out}`);
-console.log(`Write scope: ${model.write_scope}`);
-console.log(`Suppliers reviewed: ${model.counts.suppliers_reviewed}`);
-console.log(`Suppliers listed with P0 gaps: ${model.counts.suppliers_with_p0_gaps}`);
-console.log(`Evidence missing: ${model.counts.evidence_missing}`);
-console.log(`Offer/QC missing: ${model.counts.offer_missing}`);
-console.log(`Trial review missing: ${model.counts.trial_missing}`);
+console.log(`P0 激活报告已生成：${out}`);
+console.log(`写入范围：${model.write_scope}`);
+console.log(`已审阅供应商：${model.counts.suppliers_reviewed}`);
+console.log(`存在 P0 缺口的供应商：${model.counts.suppliers_with_p0_gaps}`);
+console.log(`缺当前证据：${model.counts.evidence_missing}`);
+console.log(`缺报价/QC：${model.counts.offer_missing}`);
+console.log(`缺试柜复盘：${model.counts.trial_missing}`);

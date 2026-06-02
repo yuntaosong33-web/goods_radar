@@ -10,9 +10,9 @@ test('score --dry-run builds the Codex prompt without applying assessments', () 
     encoding: 'utf8',
   });
 
-  assert.match(output, /Goods Radar Codex LLM Evaluator/);
-  assert.match(output, /Radar rows:/);
-  assert.match(output, /Dry run/);
+  assert.match(output, /Goods Radar Codex LLM 评估器/);
+  assert.match(output, /雷达行：/);
+  assert.match(output, /Dry run：/);
 });
 
 test('score:rules script remains available as the offline baseline', () => {
@@ -21,6 +21,6 @@ test('score:rules script remains available as the offline baseline', () => {
     encoding: 'utf8',
   });
 
-  assert.match(output, /Scored companies:/);
-  assert.match(output, /Dry run/);
+  assert.match(output, /已评分公司：/);
+  assert.match(output, /Dry run：/);
 });

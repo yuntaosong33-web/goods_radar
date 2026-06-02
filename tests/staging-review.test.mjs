@@ -74,8 +74,8 @@ test('buildStagingReviewModel classifies staged leads before promotion', () => {
   assert.equal(model.leadReviews[2].decision, 'promote_candidate');
   assert.equal(model.capabilityReviews[0].decision, 'matched_existing_company');
   assert.equal(model.capabilityReviews[1].decision, 'unmatched_capability');
-  assert.match(model.next_management_actions.join('\n'), /Promote 1 staged lead/);
-  assert.match(model.next_management_actions.join('\n'), /Fix 1 staged lead/);
+  assert.match(model.next_management_actions.join('\n'), /1 个暂存线索晋级候选/);
+  assert.match(model.next_management_actions.join('\n'), /修复 1 个/);
 });
 
 test('renderStagingReviewReport produces management review output with guardrails', () => {
@@ -99,9 +99,9 @@ test('renderStagingReviewReport produces management review output with guardrail
 
   const report = renderStagingReviewReport({ date: '2026-06-02', model });
 
-  assert.match(report, /Goods Radar Staging Review/);
+  assert.match(report, /Goods Radar 暂存数据审核/);
   assert.match(report, /promote_candidate/);
   assert.match(report, /Frigorifico Nuevo/);
-  assert.match(report, /Staged route rows are route_signal_only/i);
-  assert.match(report, /must not write data\/\*/i);
+  assert.match(report, /暂存路线行保持 route_signal_only/);
+  assert.match(report, /不得写入 data\/\*/);
 });
