@@ -6,6 +6,7 @@ import {
   COLLECTION_HISTORY_HEADERS,
   COMPANY_HEADERS,
   COMPANY_STATUSES,
+  CONTACT_HEADERS,
   DEVELOPMENT_DISTANCES,
   EVIDENCE_HEADERS,
   EVIDENCE_LEVELS,
@@ -14,15 +15,18 @@ import {
   LLM_EVALUATION_HEADERS,
   LOCAL_TASK_STATUSES,
   OMASUM_LEVELS,
+  QUOTE_HEADERS,
   RADAR_SCORE_HEADERS,
   RADAR_SOURCE_HEALTH_HEADERS,
   SLAUGHTER_CAPACITY_HEADERS,
+  TRIAL_HEADERS,
   TRADE_ROUTE_HEADERS,
   TRADE_ROUTE_HISTORY_HEADERS,
 } from './lib/constants.mjs';
 import { parseTsv, readTsv } from './lib/tsv.mjs';
 import { companyKey } from './lib/text.mjs';
 import { autoLeadProvenanceIssues } from './lib/provenance.mjs';
+import { validateContactRows, validateQuoteRows, validateTrialRows } from './lib/data-quality.mjs';
 
 let errors = 0;
 let warnings = 0;
@@ -69,6 +73,9 @@ const radarScores = checkHeaders('data/radar-scores.tsv', RADAR_SCORE_HEADERS);
 const radarHealth = checkHeaders('data/radar-source-health.tsv', RADAR_SOURCE_HEALTH_HEADERS);
 const evidence = checkHeaders('data/evidence.tsv', EVIDENCE_HEADERS);
 const llmEvaluations = checkHeaders('data/llm-evaluations.tsv', LLM_EVALUATION_HEADERS);
+const contacts = checkHeaders('data/contacts.tsv', CONTACT_HEADERS);
+const quotes = checkHeaders('data/quotes.tsv', QUOTE_HEADERS);
+const trials = checkHeaders('data/trials.tsv', TRIAL_HEADERS);
 const localTasks = existsSync('data/local-tasks.tsv') ? readTsv('data/local-tasks.tsv').rows : [];
 
 const seenCompany = new Map();
@@ -204,6 +211,15 @@ for (const row of llmEvaluations) {
   if (row.report_path && !existsSync(row.report_path)) error(`${label}: report_path does not exist: ${row.report_path}`);
 }
 if (llmEvaluations.length) ok(`checked ${llmEvaluations.length} llm evaluation row(s)`);
+
+for (const issue of validateContactRows(contacts)) error(issue);
+if (contacts.length) ok(`checked ${contacts.length} contact row(s)`);
+
+for (const issue of validateQuoteRows(quotes)) error(issue);
+if (quotes.length) ok(`checked ${quotes.length} quote row(s)`);
+
+for (const issue of validateTrialRows(trials)) error(issue);
+if (trials.length) ok(`checked ${trials.length} trial row(s)`);
 
 for (const row of localTasks) {
   const label = row.task_id || row.normalized_company_name || 'local task row';
