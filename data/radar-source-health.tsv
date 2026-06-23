@@ -1,7 +1,0 @@
-source_id	country	layer	status	retrieval	row_count	source_url	reason	collected_at
-brazil_mapa_sif_open_data	Brazil	factory_capability	usable	MAPA/SIF open data export	1	https://dados.agricultura.gov.br/sl/dataset/servico-de-inspecao-federal-sif/resource/97277e92-264a-4dc0-9aea-f87b8ea93798	OK	2026-05-21
-paraguay_senacsa_faena	Paraguay	factory_capability	usable	SENACSA official lists and faena/industrializacion files	3	https://senacsa.gov.py/servicios/servicios-tecnicos/estadisticas/estadisticas-con-datos-abiertos/	OK	2026-05-21
-uruguay_inac_mgap	Uruguay	factory_capability	usable	INAC slaughter files and MGAP DIA establishment lists	3	https://www.inac.uy/innovaportal/v/5539/10/innova.front/faena	OK	2026-05-21
-argentina_senasa_registros	Argentina	factory_capability	usable	SENASA registros / establecimientos habilitados	2	https://www.argentina.gob.ar/senasa/programas-sanitarios/cadenaanimal/bovinos-y-bubalinos/bovinos-y-bubalinos-industria/registros	OK	2026-05-21
-chile_sag_leepp	Chile	factory_capability	usable	SAG LEEPP and market habilitation lists	2	https://www.sag.gob.cl/ambitos-de-accion/establecimientos-exportadores-de-productos-pecuarios	OK	2026-05-21
-colombia_invima_carne	Colombia	factory_capability	usable	INVIMA meat plant, HACCP, and status lists	2	https://invima.gov.co/productos-vigilados/alimentos/carne	OK	2026-05-21

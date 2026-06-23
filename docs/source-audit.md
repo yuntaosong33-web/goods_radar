@@ -10,6 +10,9 @@ Goods Radar cannot treat scraped text as supplier truth. Every assessment must s
 | Uruguay Meats exporters | usable structured source | Exporter cards | INAC card number + product detail URL + company title |
 | Brazil Comex Stat | public route API connected | `/general` POST aggregate query | Brazil country/HS route signal only |
 | Six-country capability radar | fixture/local structured source in v1 | `collect:radar` official-source parser and manual-required audit | factory capability, slaughter/capacity, export readiness, byproduct/cold-chain signals |
+| Product scope staging | public company/product/catalog pages | `collect:products` | product clue only; requires human review before evidence upgrade |
+| Public contact staging | company website/official directory contact pages | `collect:contacts` -> `contacts:import` after approval | contact clue only until guarded import |
+| Source feedback | human sourcing feedback table | `data/source-feedback.tsv` | ranking feedback only; never deletes source history |
 
 ## Gated Or Background Sources
 
@@ -36,6 +39,8 @@ Goods Radar cannot treat scraped text as supplier truth. Every assessment must s
 - Codex may not invent evidence or create new business facts.
 - Public route data can only affect `route_feasibility`.
 - Capability radar data can only affect `radar_score`, `priority_grade`, and sourcing rationale.
+- Product-scope staging can only create review queues until a human imports or records evidence.
+- Source feedback can downrank future P0 selection, but it cannot erase source history or upgrade evidence.
 - Node guardrails cap `evidence_level` and block `D1` when the evidence chain does not support it.
 - Every Codex result must be auditable in `data/llm-evaluations.tsv` and, when provided, `reports/evaluations/*`.
 

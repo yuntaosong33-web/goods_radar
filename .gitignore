@@ -1,4 +1,20 @@
 node_modules/
 .env
 *.log
+output/
+tmp/
 reports/weekly/*.tmp
+
+# User/business layer: keep local files, do not track mutable sourcing state.
+data/*
+reports/*
+config/mission.yml
+config/sources.yml
+modes/_profile.md
+
+!data/.gitkeep
+!reports/.gitkeep
+!reports/weekly/.gitkeep
+!samples/**
+!tests/fixtures/**
+!config/*.example.yml

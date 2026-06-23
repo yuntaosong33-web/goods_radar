@@ -1,4 +1,0 @@
-source_id	collected_at	source_type	url	status	lead_count	reason
-brazil_mapa_dipoa	2026-06-02	official_list	https://www.gov.br/agricultura/pt-br/internacional/english/exporting/animal/animal-products/registro-e-habilitacao-para-estabelecimentos	collected	0	OK, no matching lead blocks
-paraguay_senacsa_frigorificos	2026-06-02	official_list	https://senacsa.gov.py/servicios/productos-de-origen-animal/lista-de-frigorificos-habilitados-por-cada-pais-habilitado/	error	0	fetch failed
-uruguay_meats_exporters	2026-06-02	official_list	https://uymeats.com/exporters/	collected	18	OK

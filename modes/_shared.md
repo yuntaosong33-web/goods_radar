@@ -1,12 +1,28 @@
-# Goods Radar 共享规则
+# Goods Radar Shared Rules
 
-本文件是 Agent-mode 评估的系统规则层。用户特定寻源偏好放在 `modes/_profile.md` 或 `config/mission.yml`。
+This file is the system rule layer for Agent-mode sourcing assessment. User-specific preferences live in `modes/_profile.md` and `config/mission.yml`.
 
-## 事实来源
+## Mission Boundary
 
-评估必须基于项目数据：
+Goods Radar is a South American omasum source radar. It may rank P0 verification candidates and prepare outreach work, but it must not approve supplier onboarding, payment, shipment, purchase release, or final procurement decisions.
 
-- `config/mission.yml` 或 `config/mission.example.yml`
+## P0 Candidate Definition
+
+A "P0 待核实候选" is not a proven supplier. It is a candidate with:
+
+- official identity or credible capability signal;
+- a public source access path, or a clear action to find one;
+- concrete product scope questions for omasum/librillo/folhoso;
+- concrete contact, video, quote, QC, and local verification questions;
+- explicit disqualifiers that would stop outreach.
+
+P0 readiness can raise outreach priority, but it never upgrades evidence.
+
+## Fact Sources
+
+Use only project data and cited public sources:
+
+- `config/mission.yml` or `config/mission.example.yml`
 - `data/companies.tsv`
 - `data/factory-capabilities.tsv`
 - `data/slaughter-capacity.tsv`
@@ -18,37 +34,39 @@
 - `data/local-tasks.tsv`
 - `docs/source-audit.md`
 
-## 硬守门规则
+Allowed public sourcing surfaces are official registers, company websites, official directories, public contact pages, and public trade-route aggregates. Login-gated data, private social messages, map reviews, and unattributed snippets must not become business facts.
 
-- 公共路线统计只影响 `route_feasibility`，永不提升 `evidence_level`。
-- 能力雷达事实只影响 `radar_score`、`priority_grade` 和寻源理由，永不提升 `evidence_level`。
-- 除非存在提单、贸易、发票或成熟交易证据，否则不得标记 `D1`。
-- 不得虚构供应商、注册号、出货、买方、价格、港口、证书、照片或拜访。
-- 不得把弱网页文本转化为供应商证明；官方名单需要注册号或结构化来源语境。
-- 缺少当前媒体、本地核实或出货证据时，下一步应索取证明，而不是假设已就绪。
-- 目标是发现未充分开发的源头潜力，而不只是寻找已经成熟交易的供应商。
-- 隐形供给分析应在成熟提单出现前观察产能、副产品处理、出口准备度、冷链路径和市场空白。
+## Guardrails
 
-## 标准等级
+- Do not invent suppliers, registration numbers, shipments, buyers, prices, ports, certificates, contacts, photos, visits, or product facts.
+- Route statistics only affect `route_feasibility`; route never upgrades `evidence_level` and never creates D1.
+- Capability radar facts only affect `radar_score`, `priority_grade`, `p0_readiness`, and outreach priority; radar never upgrades `evidence_level`.
+- D1 requires bill of lading, invoice, trade transaction, repeat purchase, trial, or equivalent transaction evidence.
+- Official factory, slaughter, export, byproduct, capacity, or cold-chain signals are reasons to verify product scope, not proof of omasum supply.
+- High radar but low product evidence official factories should enter `product_scope_needed`, not be discarded simply because they are O1/O2.
+- D1 mature rows are calibration references. They should not dominate discovery unless `--include-mature` is requested.
+- When uncertain, keep evidence lower and turn missing facts into verification questions.
 
-- Omasum 确认：`O0` 到 `O5`
-- 证据等级：`E0` 到 `E5`
-- 开发距离：`D1` 到 `D5`
+## Output Levels
 
-优先目标通常是具备可信官方或运营信号、且下一步核实动作清晰的 `D2/D3`。
+- Omasum confirmation: `O0` to `O5`
+- Evidence level: `E0` to `E5`
+- Development distance: `D1` to `D5`
 
-## 标准状态
+Preferred discovery targets are usually D2/D3 candidates with official identity, credible plant/byproduct/capacity/export/cold-chain signal, and a clear next verification action.
 
-只能使用以下公司状态：
+## P0 Readiness Values
 
-`未联系`, `已联系`, `要视频`, `待本地核实`, `待报价`, `试加工`, `试柜`, `复购`, `观察`, `淘汰`
+- `outreach_ready`: public access path exists and the product/contact questions are specific enough for manual outreach.
+- `contact_needed`: capability or identity signal exists, but public contact path is missing.
+- `product_scope_needed`: official or high-radar source exists, but omasum/librillo/folhoso scope is not proven.
+- `watchlist`: keep for monitoring; not ready for outreach.
+- `reject`: irrelevant, unverifiable, blocked, grey-source, or disqualified.
 
-## 证据解释
+## Evidence Interpretation
 
-- `E1`：官方名单、官网、弱信号或人工录入线索。
-- `E2`：提单、海关/贸易明细、发票或交易记录。
-- `E3`：当前照片或视频。
-- `E4`：本地/现场核实。
-- `E5`：试柜、复购或已确认交易表现。
-
-不确定时，保持较低证据等级，并要求补充缺失证明。
+- `E1`: official list, company website, weak public signal, or manual lead.
+- `E2`: bill of lading, customs/trade detail, invoice, or transaction record.
+- `E3`: current product photo or video.
+- `E4`: local or field verification.
+- `E5`: trial, repeat purchase, or confirmed transaction performance.

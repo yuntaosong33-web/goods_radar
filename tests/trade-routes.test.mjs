@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import {
+  DEFAULT_ROUTE_PAIRS,
   buildBrazilComexPayload,
   buildComtradeUrl,
   collectBrazilComexRoutes,
@@ -17,6 +18,14 @@ import {
 } from '../lib/trade-routes.mjs';
 import { TRADE_ROUTE_HEADERS } from '../lib/constants.mjs';
 import { writeTsv } from '../lib/tsv.mjs';
+
+test('default route pairs cover all target South American radar countries', () => {
+  const reporters = new Set(DEFAULT_ROUTE_PAIRS.map(route => route.reporter));
+  assert.deepEqual(
+    [...reporters].sort(),
+    ['Argentina', 'Brazil', 'Chile', 'Colombia', 'Paraguay', 'Uruguay'].sort(),
+  );
+});
 
 test('buildComtradeUrl targets HS 0504 export routes for reporter and partner', () => {
   const url = buildComtradeUrl({

@@ -1,37 +1,43 @@
-# 模式：Goods Radar A-G 评估
+# Mode: Goods Radar P0 A-G Evaluation
 
-Codex 根据共享规则和买方画像评估每个候选。只输出 JSON。
+Codex evaluates each candidate as a sourcing radar analyst. Return JSON only.
 
-## 必需输出结构
+## Required JSON Fields
 
-返回一个数组。每个 item 必须包含：
+Return an array. Each item must include:
 
-`source_id`, `score`, `omasum_level`, `evidence_level`, `development_distance`, `route_feasibility`, `risk_flags`, `status`, `next_action`, `rationale`, `citations`, `report_markdown`
+`source_id`, `score`, `omasum_level`, `evidence_level`, `development_distance`, `route_feasibility`, `p0_readiness`, `supplier_role`, `source_access_path`, `product_scope_questions`, `contact_questions`, `disqualifiers`, `why_now`, `risk_flags`, `status`, `next_action`, `rationale`, `citations`, `report_markdown`
 
-## A-G 报告
+Allowed `p0_readiness` values:
 
-`report_markdown` 必须包含以下章节：
+`outreach_ready`, `contact_needed`, `product_scope_needed`, `watchlist`, `reject`
 
-1. `A) 供应商身份`：来源是什么，已知事实是什么。
-2. `B) Omasum 信号`：精准/宽泛产品匹配和不确定性。
-3. `C) 未开发潜力`：为什么它可能或不可能是隐形源头。
-4. `D) 路线可行性`：只使用公共路线信号，并与供应商证明明确分开。
-5. `E) 证据链`：已有证据和缺失证据。
-6. `F) 风险`：具体风险标记，而不是泛泛谨慎。
-7. `G) 下一步核实动作`：一个可执行的运营动作。
+Allowed `supplier_role` values:
 
-当存在雷达事实时，在 A-G 报告中包含能力地图、负空间分析、可能的副产品/冷链路径、五个核实问题和下一步现场动作。
+`slaughterhouse`, `byproduct_processor`, `exporter`, `cold_storage`, `trader`, `unknown`
 
-## 评分指引
+## A-G Report Contract
 
-- 评分范围 0-100。
-- 高分应留给同时具备可信源头接触能力和清晰核实杠杆的候选。
-- 强公共路线可提高路线信心，但不能提升证据。
-- 强能力雷达可提高优先级，但不能提升证据。
-- 通过工厂能力、屠宰/产能、副产品处理、出口准备度、市场空白和可联系性分析隐形供给。
-- `D1` 是成熟参考，不是主要发现目标。
-- 带 `O3+` 且下一步可核实的 `D2/D3` 通常是最好的发现目标。
+`report_markdown` must be concise Chinese Markdown with these sections:
 
-## 引用规则
+1. `A) 身份与角色`: what the source is, what is known, and whether it is a slaughterhouse, processor, exporter, cold store, trader, or unknown.
+2. `B) 为什么可能有 omasum`: precise and broad product clues, byproduct capability, bovine slaughter, export scope, or route context.
+3. `C) 为什么可能尚未被充分开发`: negative-space analysis, radar facts, market whitespace, and why D1 evidence is absent.
+4. `D) 公开触达路径`: company site, official directory, public contact page, or the missing-contact action.
+5. `E) 缺失证据`: missing video, product scope, quote, QC, contact, route, transaction, or local verification facts.
+6. `F) 风险与淘汰条件`: concrete risks and disqualifiers.
+7. `G) 下一步 P0 动作`: one operational next action with five must-ask questions and required materials.
 
-只能使用提供的来源 URL、路线 URL、证据 ID 或路径。如果案例 payload 中没有引用来源，应把该事实表述为不确定性或下一步问题。
+## Scoring Guidance
+
+- Score range is 0-100.
+- Favor candidates with official identity, high radar signal, source-side capability, and clear verification path.
+- Penalize pure agents, unverifiable claims, vague product scope, mixed tripe risk, and missing source access.
+- Strong route context can improve route confidence only.
+- Strong radar context can improve priority and P0 readiness only.
+- Mature D1 samples are calibration, not the main discovery target.
+- O1/O2 plus high radar is often `product_scope_needed`, not automatic rejection.
+
+## Citation Rules
+
+Use only provided `url_or_file`, `source_url`, `evidence_id`, or `path_or_url`. If the payload does not include a citation for a fact, state it as uncertain or as a verification question.

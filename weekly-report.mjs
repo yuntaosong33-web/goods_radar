@@ -1,9 +1,17 @@
 #!/usr/bin/env node
 import { mkdirSync, writeFileSync } from 'fs';
-import { COMPANY_HEADERS, LOCAL_TASK_HEADERS, RADAR_SCORE_HEADERS } from './lib/constants.mjs';
+import { dirname } from 'path';
+import {
+  COMPANY_HEADERS,
+  CONTACT_HEADERS,
+  LLM_EVALUATION_HEADERS,
+  LOCAL_TASK_HEADERS,
+  RADAR_SCORE_HEADERS,
+} from './lib/constants.mjs';
 import { loadMission } from './lib/config.mjs';
 import { companyTypeLabel, countryLabel, formatLevels, formatScore } from './lib/display.mjs';
 import { ensureProjectFiles } from './lib/files.mjs';
+import { buildP0CockpitModel } from './lib/p0-cockpit.mjs';
 import { readTsv } from './lib/tsv.mjs';
 import { levelNumber, todayIso } from './lib/text.mjs';
 
@@ -32,14 +40,14 @@ function inlineList(value) {
 function translateRadarText(value) {
   return String(value || '')
     .replace(/official factory capability present/g, '存在官方工厂能力事实')
-    .replace(/plant-level slaughter\/capacity signal present/g, '存在工厂级屠宰/产能信号')
-    .replace(/export approval\/readiness signal present/g, '存在出口批准/准备度信号')
+    .replace(/plant-level slaughter\/capacity signal present/g, '存在工厂级屠宰或产能信号')
+    .replace(/export approval\/readiness signal present/g, '存在出口批准或出口准备度信号')
     .replace(/official capability unknown/g, '官方能力未知')
-    .replace(/slaughter\/capacity unknown/g, '屠宰/产能未知')
+    .replace(/slaughter\/capacity unknown/g, '屠宰或产能未知')
     .replace(/export approval unknown/g, '出口批准未知')
     .replace(/market whitespace unknown because no bill dataset is loaded/g, '因未加载提单数据集，市场空白仍未知')
-    .replace(/Contact plant or local verifier; ask for current omasum\/librillo handling video, weekly headcount, and export certificate path\./g, '联系工厂或本地核实人，索取当前 omasum/librillo 处理视频、周屠宰量和出口证书路径。')
-    .replace(/Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia\./g, '询问月屠宰量或收集量，并确认 omasum 是厂内处理还是由 triperia 处理。')
+    .replace(/Contact plant or local verifier; ask for current omasum\/librillo handling video, weekly headcount, and export certificate path\./g, '联系工厂或本地核实人，索取当前百叶处理视频、周屠宰量和出口证书路径。')
+    .replace(/Ask for monthly slaughter or collection volume and whether omasum is handled internally or by a triperia\./g, '询问月屠宰量或收集量，并确认百叶由厂内处理还是外部副产品车间处理。')
     .replace(/Confirm export certificate experience, approved markets, and cold-chain route to port\./g, '确认出口证书经验、已批准市场和到港口的冷链路径。');
 }
 
@@ -57,6 +65,30 @@ function taskCards(rows) {
   ].join('\n')).join('\n\n');
 }
 
+function p0Label(key) {
+  return {
+    outreach_ready: '可触达候选',
+    contact_needed: '联系人待补',
+    product_scope_needed: '产品范围待核实',
+    current_batch_needed: '当前批次证据待补',
+    watchlist: '观察名单',
+    reject: '淘汰或暂停',
+  }[key] || key;
+}
+
+function p0BucketRows(model) {
+  return ['outreach_ready', 'contact_needed', 'product_scope_needed', 'current_batch_needed', 'watchlist', 'reject'].flatMap(key => {
+    const rows = model.buckets[key] || [];
+    if (!rows.length) return [[p0Label(key), 0, '-', '-']];
+    return rows.slice(0, 5).map(row => [
+      p0Label(key),
+      rows.length,
+      row.name,
+      `${row.priority_grade || '-'} / ${row.radar_score || '-'}`,
+    ]);
+  });
+}
+
 function score(row) {
   return Number(row.score || 0);
 }
@@ -68,6 +100,8 @@ const { rows: companies } = readTsv('data/companies.tsv', COMPANY_HEADERS);
 const { rows: radarRows } = readTsv('data/radar-scores.tsv', RADAR_SCORE_HEADERS);
 const { rows: tasks } = readTsv('data/local-tasks.tsv', LOCAL_TASK_HEADERS);
 const { rows: history } = readTsv('data/scan-history.tsv');
+const { rows: evaluations } = readTsv('data/llm-evaluations.tsv', LLM_EVALUATION_HEADERS);
+const { rows: contacts } = readTsv('data/contacts.tsv', CONTACT_HEADERS);
 
 const addedThisWeek = history.filter(row => row.status === 'added').length;
 const o3Plus = companies.filter(row => levelNumber(row.omasum_level, 'O') >= 3).length;
@@ -86,8 +120,9 @@ const riskRows = companies
   .filter(row => row.risk_flags || row.status === '淘汰' || score(row) < 40)
   .sort((a, b) => score(a) - score(b))
   .slice(0, 10);
+const p0Model = buildP0CockpitModel({ companies, evaluations, contacts, limit: 8 });
 
-const missionName = mission.mission_name || '南美 Omasum 货源雷达';
+const missionName = mission.mission_name || '南美牛百叶货源雷达';
 const radarCountries = ['Brazil', 'Paraguay', 'Uruguay', 'Argentina', 'Chile', 'Colombia'];
 const targetCountries = [...new Set([
   ...(mission?.regions?.countries || []),
@@ -107,7 +142,14 @@ const content = `# AI 货源雷达周报
 - 待推进任务：${topTasks.length} 条
 - 潜在供给雷达目标：${radarRows.length} 家
 
-## 2. 国家机会变化
+## 2. P0 核实驾驶舱
+
+${mdTable(
+  ['桶', '桶内数量', '代表候选', '优先级/雷达'],
+  p0BucketRows(p0Model),
+)}
+
+## 3. 国家机会变化
 
 ${mdTable(
   ['国家', '候选公司数', 'O3+ 数量', 'D2/D3 数量', '结论'],
@@ -115,12 +157,12 @@ ${mdTable(
     const rows = companies.filter(row => row.country === country);
     const countryO3 = rows.filter(row => levelNumber(row.omasum_level, 'O') >= 3).length;
     const countrySemi = rows.filter(row => ['D2', 'D3'].includes(row.development_distance)).length;
-    const conclusion = rows.length ? '保留雷达跟进，按能力/副产品/出口准备度排序' : '暂无主档线索，优先补官方能力底图';
+    const conclusion = rows.length ? '保留雷达跟进，按能力、副产品和出口准备度排序' : '暂无主档线索，优先补官方能力底图';
     return [countryLabel(country), rows.length, countryO3, countrySemi, conclusion];
   }),
 )}
 
-## 3. Top 20 供应商评分
+## 4. 前 20 个供应商评分
 
 ${mdTable(
   ['公司', '国家', '类型', 'O/E/D', '评分', '状态', '下一步动作'],
@@ -135,10 +177,10 @@ ${mdTable(
   ]),
 )}
 
-## 4. Top 20 潜在供给雷达
+## 5. 前 20 个潜在供给雷达
 
 ${mdTable(
-  ['公司', '国家', 'Radar', '优先级', '隐形货源判断', '验证动作'],
+  ['公司', '国家', '雷达分', '优先级', '隐形货源判断', '验证动作'],
   topRadar.map(row => [
     row.normalized_company_name,
     countryLabel(row.country),
@@ -149,10 +191,10 @@ ${mdTable(
   ]),
 )}
 
-## 5. Top 5 线下验证点位
+## 6. 前 5 个线下验证点位
 
 ${mdTable(
-  ['公司', '国家', 'Radar', '优先级', '动作'],
+  ['公司', '国家', '雷达分', '优先级', '动作'],
   topVerificationPoints.map(row => [
     row.normalized_company_name,
     countryLabel(row.country),
@@ -162,11 +204,11 @@ ${mdTable(
   ]),
 )}
 
-## 6. 本周 Top 5 本地核实任务
+## 7. 本周前 5 个本地核实任务
 
 ${taskCards(topTasks)}
 
-## 7. 风险线索
+## 8. 风险线索
 
 ${mdTable(
   ['公司', '国家', '风险', '评分', '状态', '处理建议'],
@@ -180,20 +222,20 @@ ${mdTable(
   ]),
 )}
 
-## 8. 现场核实重点
+## 9. 现场核实重点
 
-- 优先核实 radar priority A/B/C 且 D2/D3 的工厂、二级加工商、冷库。
+- 优先核实雷达优先级 A/B/C 且开发距离为 D2/D3 的工厂、二级加工商、冷库。
 - 提单或贸易记录仍只作为 E2/D1 成熟样本，不作为发现未开发货源的前置条件。
 - 能力雷达只能提高潜力优先级；证据等级仍需要视频、现场、提单、试单或复购证据。
 
-## 9. 下周行动
+## 10. 下周行动
 
-- 对 Top 5 线下验证点位确认官方编号、周/月屠宰量、副产品归属、冷库路径和出口证书经验。
-- 把新增照片、视频、报价、提单或现场反馈录入 \`data/evidence.tsv\`、\`data/quotes.tsv\`、\`data/local-tasks.tsv\` 后重新运行 \`npm run score\`。
+- 对前 5 个线下验证点位确认官方编号、周/月屠宰量、副产品归属、冷库路径和出口证书经验。
+- 把新增照片、视频、报价、提单或现场反馈录入 \`data/evidence.tsv\`、\`data/quotes.tsv\`、\`data/local-tasks.tsv\` 后重新运行 \`goods-radar score\`。
 - 对没有主档但有官方能力记录的国家，优先补充 scan/import 映射。
 `;
 
-mkdirSync('reports/weekly', { recursive: true });
-const path = `reports/weekly/${date}-radar-weekly.md`;
-writeFileSync(path, content, 'utf8');
-console.log(`周报已生成：${path}`);
+const outputPath = argValue('--output') || `reports/weekly/${date}-radar-weekly.md`;
+mkdirSync(dirname(outputPath), { recursive: true });
+writeFileSync(outputPath, content, 'utf8');
+console.log(`周报已生成：${outputPath}`);

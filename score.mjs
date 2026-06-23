@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { spawnSync } from 'child_process';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -13,9 +12,11 @@ import {
   LOCAL_TASK_HEADERS,
   RADAR_SCORE_HEADERS,
   SLAUGHTER_CAPACITY_HEADERS,
+  SOURCE_FEEDBACK_HEADERS,
   TRADE_ROUTE_HEADERS,
 } from './lib/constants.mjs';
 import { loadMission } from './lib/config.mjs';
+import { runCodexCli } from './lib/codex-runner.mjs';
 import { ensureProjectFiles } from './lib/files.mjs';
 import {
   applyLlmAssessments,
@@ -24,6 +25,11 @@ import {
   buildRuleBaselineAssessments,
   extractJsonPayload,
 } from './lib/llm-evaluation.mjs';
+import {
+  explainCandidateSelection,
+  selectEvaluationCandidates,
+} from './lib/candidate-selection.mjs';
+import { applySourceFeedback } from './lib/source-feedback.mjs';
 import { formatRuleScoreSummary, runRuleScore } from './lib/rule-score.mjs';
 import { appendTsvRows, readTsv, writeTsv } from './lib/tsv.mjs';
 import { todayIso } from './lib/text.mjs';
@@ -49,25 +55,6 @@ function writePrompt(prompt, promptOut) {
   const dir = promptOut.replace(/[\\/][^\\/]+$/, '');
   if (dir) ensureDir(dir);
   writeFileSync(promptOut, prompt, 'utf8');
-}
-
-function runCodex(prompt, { codexBin, responseOut }) {
-  const result = spawnSync(codexBin, [
-    'exec',
-    '--skip-git-repo-check',
-    '--output-last-message',
-    responseOut,
-  ], {
-    input: prompt,
-    encoding: 'utf8',
-    windowsHide: true,
-    maxBuffer: 1024 * 1024 * 20,
-  });
-
-  if (result.error) throw new Error(`Codex CLI failed to start: ${result.error.message}`);
-  if (result.status !== 0) throw new Error(`Codex CLI exited ${result.status}: ${(result.stderr || result.stdout || '').trim()}`);
-  if (!existsSync(responseOut)) throw new Error(`Codex CLI did not write response file: ${responseOut}`);
-  return readFileSync(responseOut, 'utf8');
 }
 
 function writeEvaluationReports(evaluations) {
@@ -96,6 +83,11 @@ ensureProjectFiles();
 
 const limit = Number(argValue('--limit') || '10');
 const sourceId = argValue('--source-id');
+const rankBy = argValue('--rank-by') || 'p0';
+const minRadarValue = argValue('--min-radar');
+const minRadar = minRadarValue === null ? null : Number(minRadarValue);
+const includeMature = hasFlag('--include-mature');
+const explainSelection = hasFlag('--explain-selection');
 const dryRun = hasFlag('--dry-run');
 const skipApply = hasFlag('--skip-apply');
 const fallbackRules = hasFlag('--fallback-rules') || process.env.GOODS_RADAR_CODEX_FALLBACK === 'rules';
@@ -112,9 +104,18 @@ const { rows: evidence } = readTsv('data/evidence.tsv', EVIDENCE_HEADERS);
 const { rows: capabilities } = readTsv('data/factory-capabilities.tsv', FACTORY_CAPABILITY_HEADERS);
 const { rows: capacities } = readTsv('data/slaughter-capacity.tsv', SLAUGHTER_CAPACITY_HEADERS);
 const { rows: approvals } = readTsv('data/export-approvals.tsv', EXPORT_APPROVAL_HEADERS);
-const companies = sourceId
-  ? baseline.scoredRows.filter(row => row.source_id === sourceId)
-  : baseline.scoredRows.slice(0, limit);
+const { rows: feedbackRows } = readTsv('data/source-feedback.tsv', SOURCE_FEEDBACK_HEADERS);
+const feedbackAdjustedRows = applySourceFeedback({
+  companies: baseline.scoredRows,
+  feedbackRows,
+});
+const companies = selectEvaluationCandidates(feedbackAdjustedRows, {
+  rankBy,
+  limit,
+  sourceId,
+  minRadar,
+  includeMature,
+});
 
 if (!companies.length) {
   console.error(sourceId ? `未找到 --source-id ${sourceId} 对应公司` : '没有可评估公司');
@@ -139,15 +140,28 @@ const prompt = buildCodexEvaluationPrompt(cases, {
 });
 writePrompt(prompt, promptOut);
 
-console.log('Goods Radar Codex LLM 评估器');
+console.log('Goods Radar Codex 大模型评估器');
 console.log('================================');
 console.log(formatRuleScoreSummary(baseline));
 console.log('');
 console.log(`案例数：${cases.length}`);
-console.log(`Prompt：${promptOut}`);
+console.log(`提示词文件：${promptOut}`);
+console.log(`排序方式：${rankBy}`);
+if (Number.isFinite(minRadar)) console.log(`最低雷达分：${minRadar}`);
+if (includeMature) console.log('包含成熟 D1 校准样本：是');
+if (explainSelection) {
+  console.log('');
+  console.log(explainCandidateSelection(feedbackAdjustedRows, {
+    selected: companies,
+    rankBy,
+    limit,
+    minRadar,
+    includeMature,
+  }));
+}
 
 if (dryRun) {
-  console.log('Dry run：prompt 已生成，未调用 Codex，未修改数据。');
+  console.log('试运行：提示词已生成，未调用 Codex，未修改数据。');
   process.exit(0);
 }
 
@@ -159,18 +173,18 @@ if (responseFile) {
   console.log(`响应文件：${responseFile}`);
   assessments = extractJsonPayload(responseText);
 } else {
-  console.log(`Codex binary：${codexBin}`);
+  console.log(`Codex 可执行文件：${codexBin}`);
   try {
-    responseText = runCodex(prompt, { codexBin, responseOut });
+    responseText = runCodexCli(prompt, { codexBin, responseOut });
     assessments = extractJsonPayload(responseText);
   } catch (err) {
     if (!fallbackRules) {
       console.error(err.message);
-      console.error('Prompt 已保存。请配置 CODEX_BIN 后重试，或使用 --response-file 再次运行。货源雷达兜底可加 --fallback-rules。');
+      console.error('提示词已保存。请配置 CODEX_BIN 后重试，或使用 --response-file 再次运行。货源雷达兜底可加 --fallback-rules。');
       process.exit(2);
     }
     console.error(err.message);
-    console.error('Codex CLI 不可用，已使用规则基线生成 source-radar 兜底评估；这不是 LLM 判断，也不是采购决策。');
+    console.error('Codex 命令行不可用，已使用规则基线生成货源雷达兜底评估；这不是大模型判断，也不是采购决策。');
     assessments = buildRuleBaselineAssessments(cases);
     engine = 'rule_baseline';
   }
@@ -199,4 +213,4 @@ if (!skipApply) {
 console.log(`已解析评估：${assessments.length}`);
 console.log(`已写入评估：${skipApply ? 0 : evaluations.length}`);
 console.log(`已写入报告：${skipApply ? 0 : reportsWritten}`);
-if (skipApply) console.log('Skip apply：companies.tsv、local-tasks.tsv、llm-evaluations.tsv 和 reports 均未修改。');
+if (skipApply) console.log('跳过写入：companies.tsv、local-tasks.tsv、llm-evaluations.tsv 和 reports 均未修改。');
